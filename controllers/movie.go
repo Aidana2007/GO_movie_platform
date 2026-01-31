@@ -8,9 +8,13 @@ import (
 	"github.com/Aidana2007/GO_movie_platform/database"
 	"github.com/Aidana2007/GO_movie_platform/models"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/locales/bg"
+	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 )
+
+var validate = validator.New()
 
 var movieCollection *mongo.Collection = database.GetCollection("movies")
 
@@ -61,6 +65,25 @@ func GetMovieById() gin.HandlerFunc {
 	}
 }
 
-func AddMovie(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"message": "AddMovie works"})
+func AddMovie() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
+		defer cancel()
+
+		var movie models.Movie
+		err := c.BindJSON(&movie); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid movie data"})
+			return
+		}
+		if err := validate.Struct(movie); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Validation failed: " , "details" : err.Error()})
+			return
+		}
+		result , err := movieCollection.InsertOne(ctx, movie)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add movie"})
+			return
+		}
+		c.JSON(http.StatusCreated,result)
+	}
 }
