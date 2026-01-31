@@ -1,25 +1,54 @@
 package database
 
 import (
-	"context"
 	"log"
-	"time"
+	"os"
 
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
-var Client *mongo.Client
+func ConnectDB() *mongo.Client {
 
-func ConnectMongo() {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
+	err := godotenv.Load(".env")
 
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017"))
 	if err != nil {
-		log.Fatal(err)
+		log.Println("Error loading .env file")
 	}
 
-	Client = client
-	log.Println("Connected to MongoDB")
+	MongoDB := os.Getenv("MONGODB_URI")
+
+	if MongoDB == "" {
+		log.Fatal("MONGODB_URI not set")
+	}
+
+	clientOptions := options.Client().ApplyURI(MongoDB)
+
+	client, err := mongo.Connect(clientOptions)
+
+	if err != nil {
+		return nil
+	}
+
+	return client
+
+}
+
+var Client *mongo.Client = ConnectDB()
+
+func GetCollection(collectionName string) *mongo.Collection {
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	DatabaseName := os.Getenv("MONGODB_DATABASE")
+	collection := Client.Database(DatabaseName).Collection(collectionName)
+
+	if collection == nil {
+		return nil
+	}
+	return collection
 }

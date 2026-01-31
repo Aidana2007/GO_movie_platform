@@ -1,7 +1,7 @@
 package routes
 
 import (
-	controllers "magicstream/contollers"
+	controllers "github.com/Aidana2007/GO_movie_platform/controllers"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,7 +9,9 @@ import (
 func RegisterRoutes(r *gin.Engine) {
 	r.GET("/health", controllers.Health)
 
-	r.GET("/movies", controllers.GetMovies)
+	r.GET("/movies", controllers.GetMovies())
+	r.GET("/movies/:imdb_id", controllers.GetMovieById())
+
 	r.POST("/movies", controllers.AddMovie)
 
 	r.POST("/register", controllers.Register)
