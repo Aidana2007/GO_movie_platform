@@ -11,8 +11,9 @@ func RegisterRoutes(r *gin.Engine) {
 
 	r.GET("/movies", controllers.GetMovies())
 	r.GET("/movies/:imdb_id", controllers.GetMovieById())
+	r.GET("/movies/stats", controllers.GetMovieStats())
 
-	r.POST("/movies", controllers.AddMovie)
+	r.POST("/movies", controllers.AddMovie())
 
 	r.POST("/register", controllers.Register)
 	r.POST("/login", controllers.Login)
