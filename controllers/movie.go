@@ -11,10 +11,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 var validate = validator.New()
-var movieCollection = database.GetCollection("movies")
+
+func getMovieCollection() *mongo.Collection {
+	return database.GetCollection("movies")
+}
 
 func GetMovies(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
@@ -22,7 +26,7 @@ func GetMovies(c *gin.Context) {
 
 	movies := make([]models.Movie, 0)
 
-	cursor, err := movieCollection.Find(ctx, bson.M{})
+	cursor, err := getMovieCollection().Find(ctx, bson.M{})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch movies"})
 		return
@@ -50,7 +54,7 @@ func GetMovieById(c *gin.Context) {
 	}
 
 	var movie models.Movie
-	err = movieCollection.FindOne(ctx, bson.M{"_id": objID}).Decode(&movie)
+	err = getMovieCollection().FindOne(ctx, bson.M{"_id": objID}).Decode(&movie)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Movie not found"})
 		return
@@ -83,7 +87,7 @@ func AddMovie(c *gin.Context) {
 		}
 	}
 
-	result, err := movieCollection.InsertOne(ctx, movie)
+	result, err := getMovieCollection().InsertOne(ctx, movie)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add movie"})
 		return
@@ -122,7 +126,7 @@ func UpdateMovie(c *gin.Context) {
 		"$set": updateMap,
 	}
 
-	result, err := movieCollection.UpdateOne(ctx, bson.M{"_id": objID}, update)
+	result, err := getMovieCollection().UpdateOne(ctx, bson.M{"_id": objID}, update)
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
@@ -155,7 +159,7 @@ func DeleteMovie(c *gin.Context) {
 		return
 	}
 
-	result, err := movieCollection.DeleteOne(ctx, bson.M{"_id": objID})
+	result, err := getMovieCollection().DeleteOne(ctx, bson.M{"_id": objID})
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return

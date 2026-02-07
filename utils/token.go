@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/Aidana2007/GO_movie_platform/database"
@@ -21,9 +22,13 @@ type SignedDetails struct {
 	jwt.RegisteredClaims
 }
 
-var SECRET_KEY string = os.Getenv("SECRET_KEY")
-var SECRET_REFRESH_KEY string = os.Getenv("SECRET_REFRESH_KEY")
-var userCollection = database.GetCollection("users")
+func getSecretKey() string {
+	return os.Getenv("SECRET_KEY")
+}
+
+func getRefreshSecretKey() string {
+	return os.Getenv("SECRET_REFRESH_KEY")
+}
 
 func GenerateAllTokens(email, firstname, lastname, role, userId string) (string, string, error) {
 	claims := &SignedDetails{
@@ -39,7 +44,7 @@ func GenerateAllTokens(email, firstname, lastname, role, userId string) (string,
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	signedToken, err := token.SignedString([]byte(SECRET_KEY))
+	signedToken, err := token.SignedString([]byte(getSecretKey()))
 
 	if err != nil {
 		return "", "", err
@@ -58,7 +63,7 @@ func GenerateAllTokens(email, firstname, lastname, role, userId string) (string,
 		},
 	}
 	refreshToken := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshClaims)
-	resfreshSignedToken, err := refreshToken.SignedString([]byte(SECRET_REFRESH_KEY))
+	resfreshSignedToken, err := refreshToken.SignedString([]byte(getRefreshSecretKey()))
 
 	if err != nil {
 		return "", "", err
@@ -68,10 +73,11 @@ func GenerateAllTokens(email, firstname, lastname, role, userId string) (string,
 }
 
 func UpdateAllTokens(userId, token, refreshToken string) (err error) {
+	userCollection := database.GetCollection("users")
 	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
 
-	updateAt, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+	updateAt := time.Now()
 
 	updatedata := bson.M{
 		"$set": bson.M{
@@ -93,7 +99,10 @@ func GetAccessToken(c *gin.Context) (string, error) {
 	if authHeader == "" {
 		return "", errors.New("no auth header")
 	}
-	tokenString := authHeader[len("Bearer "):]
+	if !strings.HasPrefix(authHeader, "Bearer ") {
+		return "", errors.New("invalid auth header")
+	}
+	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 
 	if tokenString == "" {
 		return "", errors.New("bearer token not found")
@@ -104,7 +113,7 @@ func ValidateToken(tokenString string) (*SignedDetails, error) {
 	claims := &SignedDetails{}
 
 	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-		return []byte(SECRET_KEY), nil
+		return []byte(getSecretKey()), nil
 	})
 	if err != nil {
 		return nil, err

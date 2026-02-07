@@ -11,10 +11,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
 
-var userCollection = database.GetCollection("users")
+func getUserCollection() *mongo.Collection {
+	return database.GetCollection("users")
+}
 
 func HashPassword(password string) (string, error) {
 	HashPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
@@ -44,7 +47,7 @@ func RegisterUser(c *gin.Context) {
 	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
 
-	count, err := userCollection.CountDocuments(ctx, bson.M{"email": user.Email})
+	count, err := getUserCollection().CountDocuments(ctx, bson.M{"email": user.Email})
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check user"})
@@ -57,7 +60,7 @@ func RegisterUser(c *gin.Context) {
 	user.UserId = bson.NewObjectID().Hex()
 	user.Password = hashedPassword
 
-	result, err := userCollection.InsertOne(ctx, user)
+	result, err := getUserCollection().InsertOne(ctx, user)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
@@ -79,7 +82,7 @@ func LoginUser(c *gin.Context) {
 
 	var foundUser models.User
 
-	err := userCollection.FindOne(ctx, bson.M{"email": userLogin.Email}).Decode(&foundUser)
+	err := getUserCollection().FindOne(ctx, bson.M{"email": userLogin.Email}).Decode(&foundUser)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password"})
 		return
