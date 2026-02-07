@@ -14,96 +14,88 @@ import (
 )
 
 var validate = validator.New()
+var movieCollection = database.GetCollection("movies")
 
-func GetMovies() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		movieCollection := database.GetCollection("movies")
-		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
-		defer cancel()
+func GetMovies(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
 
-		movies := make([]models.Movie, 0)
+	movies := make([]models.Movie, 0)
 
-		cursor, err := movieCollection.Find(ctx, bson.M{})
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch movies"})
-			return
-		}
-		defer cursor.Close(ctx)
-
-		if err = cursor.All(ctx, &movies); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to decode movies"})
-			return
-		}
-
-		c.JSON(http.StatusOK, movies)
+	cursor, err := movieCollection.Find(ctx, bson.M{})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch movies"})
+		return
 	}
+	defer cursor.Close(ctx)
+
+	if err = cursor.All(ctx, &movies); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to decode movies"})
+		return
+	}
+
+	c.JSON(http.StatusOK, movies)
 }
 
-func GetMovieById() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		movieCollection := database.GetCollection("movies")
-		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
-		defer cancel()
+func GetMovieById(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
 
-		idParam := c.Param("id")
+	idParam := c.Param("id")
 
-		objID, err := bson.ObjectIDFromHex(idParam)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid movie id"})
-			return
-		}
-
-		var movie models.Movie
-		err = movieCollection.FindOne(ctx, bson.M{"_id": objID}).Decode(&movie)
-		if err != nil {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Movie not found"})
-			return
-		}
-
-		c.JSON(http.StatusOK, movie)
+	objID, err := bson.ObjectIDFromHex(idParam)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid movie id"})
+		return
 	}
+
+	var movie models.Movie
+	err = movieCollection.FindOne(ctx, bson.M{"_id": objID}).Decode(&movie)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Movie not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, movie)
 }
 
-func AddMovie() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		movieCollection := database.GetCollection("movies")
-		ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
-		defer cancel()
+func AddMovie(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
+	defer cancel()
 
-		var movie models.Movie
-		if err := c.ShouldBindJSON(&movie); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid movie data"})
-			return
-		}
-
-		if err := validate.Struct(movie); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-
-		genreCollection := database.GetCollection("genres")
-		for _, gid := range movie.GenreIDs {
-			count, _ := genreCollection.CountDocuments(ctx, bson.M{"genre_id": gid})
-			if count == 0 {
-				c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid genre_id: " + strconv.Itoa(gid)})
-				return
-			}
-		}
-
-		result, err := movieCollection.InsertOne(ctx, movie)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add movie"})
-			return
-		}
-
-		MovieWorkerChan <- movie
-
-		c.JSON(http.StatusCreated, result)
+	var movie models.Movie
+	if err := c.ShouldBindJSON(&movie); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid movie data"})
+		return
 	}
+
+	if err := validate.Struct(movie); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	genreCollection := database.GetCollection("genres")
+	for _, gid := range movie.GenreIDs {
+		count, _ := genreCollection.CountDocuments(ctx, bson.M{"genre_id": gid})
+		if count == 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid genre_id: " + strconv.Itoa(gid)})
+			return
+		}
+	}
+
+	result, err := movieCollection.InsertOne(ctx, movie)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add movie"})
+		return
+	}
+
+	MovieWorkerChan <- movie
+
+	c.JSON(http.StatusCreated, result)
+
 }
 
 func UpdateMovie(c *gin.Context) {
-	movieCollection := database.GetCollection("movies")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -145,7 +137,6 @@ func UpdateMovie(c *gin.Context) {
 }
 
 func DeleteMovie(c *gin.Context) {
-	movieCollection := database.GetCollection("movies")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
