@@ -12,6 +12,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 var validate = validator.New()
@@ -24,9 +25,52 @@ func GetMovies(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
 
-	var movies []models.Movie
+	searchQuery := c.Query("search")
+	genreIDStr := c.Query("genre")
+	pageStr := c.DefaultQuery("page", "1")
+	limitStr := c.DefaultQuery("limit", "10")
 
-	cursor, err := getMovieCollection().Find(ctx, bson.M{})
+	page, err := strconv.Atoi(pageStr)
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	limit, err := strconv.Atoi(limitStr)
+	if err != nil || limit < 1 {
+		limit = 10
+	}
+
+	if limit > 100 {
+		limit = 100
+	}
+
+	filter := bson.M{}
+
+	if searchQuery != "" {
+		filter["title"] = bson.M{"$regex": searchQuery, "$options": "i"}
+	}
+
+	if genreIDStr != "" {
+		genreID, err := strconv.Atoi(genreIDStr)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid genre id"})
+			return
+		}
+		filter["genre_ids"] = genreID
+	}
+
+	skip := (page - 1) * limit
+
+	totalCount, err := getMovieCollection().CountDocuments(ctx, filter)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to count movies"})
+		return
+	}
+
+	findOptions := options.Find().SetSkip(int64(skip)).SetLimit(int64(limit))
+
+	var movies []models.Movie
+	cursor, err := getMovieCollection().Find(ctx, filter, findOptions)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch movies"})
 		return
@@ -38,7 +82,17 @@ func GetMovies(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, movies)
+	totalPages := int((totalCount + int64(limit) - 1) / int64(limit))
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": movies,
+		"pagination": gin.H{
+			"page":        page,
+			"limit":       limit,
+			"total_items": totalCount,
+			"total_pages": totalPages,
+		},
+	})
 }
 
 func GetMovieById(c *gin.Context) {
