@@ -12,8 +12,7 @@ func main() {
 	database.ConnectDB()
 
 	r := gin.Default()
-	routes.RegisterProtectedRoutes(r)
-	routes.RegisterUnprotectedRoutes(r)
+	routes.RegisterRoutes(r)
 
 	log.Println("Server running on :8080")
 	r.Run(":8080")
