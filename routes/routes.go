@@ -14,6 +14,7 @@ func RegisterRoutes(r *gin.Engine) {
 		public.POST("/login", controllers.LoginUser)
 		public.GET("/movies", controllers.GetMovies)
 		public.GET("/movies/:id", controllers.GetMovieById)
+		public.GET("/movies/:id/reviews", controllers.GetReviewsByMovie)
 	}
 
 	admin := r.Group("/")
@@ -22,5 +23,12 @@ func RegisterRoutes(r *gin.Engine) {
 		admin.POST("/addmovie", controllers.AddMovie)
 		admin.PUT("/movies/:id", controllers.UpdateMovie)
 		admin.DELETE("/movies/:id", controllers.DeleteMovie)
+	}
+
+	authenticated := r.Group("/")
+	authenticated.Use(middleware.AuthMiddleware())
+	{
+		authenticated.POST("/movies/:id/reviews", controllers.AddReview)
+		authenticated.DELETE("/reviews/:id", controllers.DeleteReview)
 	}
 }
