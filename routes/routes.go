@@ -8,27 +8,43 @@ import (
 
 func RegisterRoutes(r *gin.Engine) {
 
+	// Go Template routes (requirement)
 	public := r.Group("/")
 	{
-		public.POST("/register", controllers.RegisterUser)
-		public.POST("/login", controllers.LoginUser)
-		public.GET("/movies", controllers.GetMovies)
-		public.GET("/movies/:id", controllers.GetMovieById)
-		public.GET("/movies/:id/reviews", controllers.GetReviewsByMovie)
+		public.GET("/", controllers.GetHome)
+		public.GET("/app", controllers.GetAppPage)
+		public.GET("/movies", controllers.GetMoviesPage)
+		public.GET("/movie/:id", controllers.GetMovieDetailsPage)
+		public.GET("/profile", controllers.GetProfilePage)
 	}
 
-	admin := r.Group("/")
-	admin.Use(middleware.AuthMiddleware(), middleware.AdminMiddleware())
+	// API routes
+	api := r.Group("/api")
 	{
-		admin.POST("/addmovie", controllers.AddMovie)
-		admin.PUT("/movies/:id", controllers.UpdateMovie)
-		admin.DELETE("/movies/:id", controllers.DeleteMovie)
-	}
+		// Auth
+		api.POST("/register", controllers.RegisterUser)
+		api.POST("/login", controllers.LoginUser)
 
-	authenticated := r.Group("/")
-	authenticated.Use(middleware.AuthMiddleware())
-	{
-		authenticated.POST("/movies/:id/reviews", controllers.AddReview)
-		authenticated.DELETE("/reviews/:id", controllers.DeleteReview)
+		// Movies (public)
+		api.GET("/movies", controllers.GetMovies)
+		api.GET("/movies/:id", controllers.GetMovieById)
+		api.GET("/movies/:id/reviews", controllers.GetReviewsByMovie)
+
+		// Admin routes
+		admin := api.Group("/")
+		admin.Use(middleware.AuthMiddleware(), middleware.AdminMiddleware())
+		{
+			admin.POST("/movies", controllers.AddMovie)
+			admin.PUT("/movies/:id", controllers.UpdateMovie)
+			admin.DELETE("/movies/:id", controllers.DeleteMovie)
+		}
+
+		// Authenticated routes
+		authenticated := api.Group("/")
+		authenticated.Use(middleware.AuthMiddleware())
+		{
+			authenticated.POST("/movies/:id/reviews", controllers.AddReview)
+			authenticated.DELETE("/reviews/:id", controllers.DeleteReview)
+		}
 	}
 }

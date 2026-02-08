@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль - Movie Platform</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f0f0f;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function Header({ onLogout }) {
+            const headerStyle = {
+                position: 'fixed',
+                top: 0,
+                width: '100%',
+                zIndex: 1000,
+                background: '#0f0f0f',
+                padding: '20px 50px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                borderBottom: '1px solid #333'
+            };
+
+            const logoStyle = {
+                fontSize: '28px',
+                fontWeight: 'bold',
+                color: '#e50914',
+                textDecoration: 'none'
+            };
+
+            const navStyle = {
+                display: 'flex',
+                gap: '30px',
+                alignItems: 'center'
+            };
+
+            const linkStyle = {
+                color: '#fff',
+                textDecoration: 'none',
+                fontSize: '16px',
+                transition: 'color 0.3s'
+            };
+
+            const logoutBtnStyle = {
+                padding: '8px 20px',
+                background: 'transparent',
+                color: '#fff',
+                border: '1px solid #fff',
+                borderRadius: '4px',
+                fontSize: '14px',
+                cursor: 'pointer'
+            };
+
+            return (
+                <header style={headerStyle}>
+                    <a href="/app" style={logoStyle}>MOVIE</a>
+                    <nav style={navStyle}>
+                        <a href="/app" style={linkStyle}>Главная</a>
+                        <a href="/movies" style={linkStyle}>Каталог</a>
+                        <button style={logoutBtnStyle} onClick={onLogout}>
+                            Выйти
+                        </button>
+                    </nav>
+                </header>
+            );
+        }
+
+        function Profile() {
+            const [user, setUser] = useState(null);
+            const [loading, setLoading] = useState(true);
+
+            useEffect(() => {
+                const savedUser = localStorage.getItem('user');
+                if (!savedUser) {
+                    window.location.href = '/app';
+                    return;
+                }
+                setUser(JSON.parse(savedUser));
+                setLoading(false);
+            }, []);
+
+            const handleLogout = () => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = '/app';
+            };
+
+            const containerStyle = {
+                padding: '120px 50px 50px',
+                minHeight: '100vh',
+                maxWidth: '800px',
+                margin: '0 auto'
+            };
+
+            const cardStyle = {
+                background: '#1a1a1a',
+                padding: '40px',
+                borderRadius: '8px',
+                border: '1px solid #333'
+            };
+
+            const avatarStyle = {
+                width: '120px',
+                height: '120px',
+                borderRadius: '50%',
+                background: '#e50914',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '48px',
+                fontWeight: 'bold',
+                margin: '0 auto 30px'
+            };
+
+            const titleStyle = {
+                fontSize: '36px',
+                fontWeight: 'bold',
+                marginBottom: '30px',
+                textAlign: 'center'
+            };
+
+            const infoGroupStyle = {
+                marginBottom: '25px',
+                paddingBottom: '25px',
+                borderBottom: '1px solid #333'
+            };
+
+            const labelStyle = {
+                fontSize: '14px',
+                color: '#b3b3b3',
+                marginBottom: '8px',
+                textTransform: 'uppercase',
+                letterSpacing: '1px'
+            };
+
+            const valueStyle = {
+                fontSize: '20px',
+                color: '#fff',
+                fontWeight: '500'
+            };
+
+            const badgeStyle = {
+                display: 'inline-block',
+                padding: '5px 15px',
+                background: user?.role === 'admin' ? '#e50914' : '#333',
+                borderRadius: '20px',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                marginTop: '10px'
+            };
+
+            const loadingTextStyle = {
+                textAlign: 'center',
+                fontSize: '24px'
+            };
+
+            if (loading) {
+                return (
+                    <div>
+                        <Header onLogout={handleLogout} />
+                        <div style={containerStyle}>
+                            <div style={loadingTextStyle}>Загрузка...</div>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (!user) return null;
+
+            return (
+                <div>
+                    <Header onLogout={handleLogout} />
+                    <div style={containerStyle}>
+                        <div style={cardStyle}>
+                            <div style={avatarStyle}>
+                                {user.firstName?.[0]?.toUpperCase() || 'U'}
+                            </div>
+                            <h1 style={titleStyle}>Профиль</h1>
+
+                            <div style={infoGroupStyle}>
+                                <div style={labelStyle}>Имя</div>
+                                <div style={valueStyle}>{user.firstName || 'Не указано'}</div>
+                            </div>
+
+                            <div style={infoGroupStyle}>
+                                <div style={labelStyle}>Фамилия</div>
+                                <div style={valueStyle}>{user.lastName || 'Не указано'}</div>
+                            </div>
+
+                            <div style={infoGroupStyle}>
+                                <div style={labelStyle}>Email</div>
+                                <div style={valueStyle}>{user.email}</div>
+                            </div>
+
+                            <div style={infoGroupStyle}>
+                                <div style={labelStyle}>Роль</div>
+                                <div style={valueStyle}>
+                                    {user.role === 'admin' ? 'Администратор' : 'Пользователь'}
+                                    <span style={badgeStyle}>
+                                        {user.role === 'admin' ? 'ADMIN' : 'USER'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<Profile />, document.getElementById('root'));
+    </script>
+</body>
+</html>

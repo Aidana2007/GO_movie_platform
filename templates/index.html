@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Platform - Главная</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            color: white;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .info {
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .links {
+            margin-top: 30px;
+        }
+        .links a {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 30px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+        .links a:hover {
+            transform: translateY(-3px);
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        .stat-label {
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Movie Platform</h1>
+        <p style="font-size: 1.2em; margin-bottom: 20px;">Добро пожаловать на платформу фильмов</p>
+        
+        <div class="info">
+            <h2>О платформе</h2>
+            <p style="margin-top: 15px; line-height: 1.6;">
+                Это платформа для просмотра и обсуждения фильмов. 
+                Здесь вы можете найти интересные фильмы, читать отзывы и делиться своими впечатлениями.
+            </p>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value">{{.TotalMovies}}</div>
+                    <div class="stat-label">Фильмов</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{{.TotalUsers}}</div>
+                    <div class="stat-label">Пользователей</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{{.TotalReviews}}</div>
+                    <div class="stat-label">Отзывов</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="links">
+            <a href="/movies">Список фильмов (React)</a>
+            <a href="/api/movies">API: Список фильмов</a>
+        </div>
+    </div>
+</body>
+</html>
