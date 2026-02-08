@@ -1,23 +1,26 @@
 package routes
 
 import (
-	"fmt"
-
 	"github.com/Aidana2007/GO_movie_platform/controllers"
-
+	"github.com/Aidana2007/GO_movie_platform/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 func RegisterRoutes(r *gin.Engine) {
-	r.GET("/movies", controllers.GetMovies)
-	r.GET("/movies/:id", controllers.GetMovieById)
-	r.POST("/movies", controllers.AddMovie)
-	r.PUT("/movies/:id", controllers.UpdateMovie)
-	r.DELETE("/movies/:id", controllers.DeleteMovie)
-	r.POST("/register", controllers.RegisterUser)
-	r.POST("/login", controllers.LoginUser)
 
-	if err := r.Run(":8080"); err != nil {
-		fmt.Println(err)
+	public := r.Group("/")
+	{
+		public.POST("/register", controllers.RegisterUser)
+		public.POST("/login", controllers.LoginUser)
+		public.GET("/movies", controllers.GetMovies)
+		public.GET("/movies/:id", controllers.GetMovieById)
+	}
+
+	admin := r.Group("/")
+	admin.Use(middleware.AuthMiddleware(), middleware.AdminMiddleware())
+	{
+		admin.POST("/addmovie", controllers.AddMovie)
+		admin.PUT("/movies/:id", controllers.UpdateMovie)
+		admin.DELETE("/movies/:id", controllers.DeleteMovie)
 	}
 }

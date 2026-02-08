@@ -2,32 +2,34 @@ package middleware
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/Aidana2007/GO_movie_platform/utils"
 	"github.com/gin-gonic/gin"
 )
 
-func AuthMiddleware(c *gin.Context) {
-	token, err := utils.GetAccessToken(c)
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
-		c.Abort()
-		return
-	}
-	if token == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "token is empty"})
-		c.Abort()
-		return
-	}
-	claims, err := utils.ValidateToken(token)
+func AuthMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
 
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
-		c.Abort()
-		return
-	}
-	c.Set("userId", claims.UserId)
-	c.Set("role", claims.Role)
+		authHeader := c.GetHeader("Authorization")
+		if !strings.HasPrefix(authHeader, "Bearer ") {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "missing token"})
+			c.Abort()
+			return
+		}
 
-	c.Next()
+		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+
+		claims, err := utils.ValidateToken(tokenString)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid token"})
+			c.Abort()
+			return
+		}
+
+		// save claims in context for next middleware
+		c.Set("claims", claims)
+
+		c.Next()
+	}
 }
