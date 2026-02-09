@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Детали фильма - Movie Platform</title>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <title>{{.Title}}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,30 +11,383 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #0f0f0f;
             color: #fff;
         }
+
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: #0f0f0f;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #e50914;
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: #e50914;
+        }
+        .nav a.active {
+            color: #e50914;
+        }
+
+        .container {
+            padding: 120px 50px 50px;
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+
+        .poster {
+            width: 300px;
+            height: 450px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+        }
+
+        .info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .meta {
+            font-size: 18px;
+            color: #b3b3b3;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #e5e5e5;
+            margin-bottom: 30px;
+        }
+
+        .btn-play {
+            padding: 15px 40px;
+            background: #e50914;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.3s;
+        }
+
+        .btn-play:hover {
+            background: #b8070e;
+        }
+
+        .section {
+            margin-top: 50px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .review-form {
+            background: #1a1a1a;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .rating-input {
+            padding: 10px 15px;
+            background: #333;
+            border: 1px solid #555;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 16px;
+            width: 100px;
+        }
+
+        .rating-input:focus {
+            outline: none;
+            border-color: #e50914;
+        }
+
+        .textarea {
+            width: 100%;
+            padding: 15px;
+            background: #333;
+            border: 1px solid #555;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 16px;
+            font-family: inherit;
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .textarea:focus {
+            outline: none;
+            border-color: #e50914;
+        }
+
+        .btn-submit {
+            padding: 12px 30px;
+            background: #e50914;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: #b8070e;
+        }
+
+        .btn-submit:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+
+        .login-prompt {
+            background: #1a1a1a;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #b3b3b3;
+            border: 1px solid #333;
+        }
+
+        .login-prompt a {
+            color: #e50914;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .login-prompt a:hover {
+            text-decoration: underline;
+        }
+
+        .review-item {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #333;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .review-rating {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .review-date {
+            font-size: 14px;
+            color: #b3b3b3;
+        }
+
+        .review-comment {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #e5e5e5;
+            margin-top: 10px;
+        }
+
+        .btn-delete {
+            padding: 5px 10px;
+            background: #e50914;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-delete:hover {
+            background: #b8070e;
+        }
+
+        .empty-reviews {
+            text-align: center;
+            color: #b3b3b3;
+            font-size: 18px;
+            padding: 40px 0;
+        }
+
+        .loading-text, .error-text {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 50px;
+        }
+
+        .error-text {
+            color: #e50914;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #333;
+            border-top: 5px solid #e50914;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 50px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            .container {
+                padding: 100px 20px 30px;
+            }
+            .hero {
+                flex-direction: column;
+            }
+            .poster {
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+            .title {
+                font-size: 32px;
+            }
+        }
     </style>
 </head>
-<body>
-    <div id="root"></div>
+<body data-page="{{.Page}}" data-year="{{.Year}}" data-app="{{.AppName}}">
+    <header class="header">
+        <a href="/app" class="logo">{{.AppName}}</a>
+        <nav class="nav">
+            <a href="/app" class="{{if eq .Page "app"}}active{{end}}">Главная</a>
+            <a href="/movies" class="{{if or (eq .Page "movies") (eq .Page "movie")}}active{{end}}">Каталог</a>
+        </nav>
+    </header>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+    <div id="loading" class="loading-text">
+        <div class="spinner"></div>
+    </div>
+
+    <div id="error" class="error-text hidden"></div>
+
+    <div id="content" class="container hidden"></div>
+
+    <script>
+        let currentUser = null;
+        let movie = null;
+        let reviews = [];
+        const movieId = window.location.pathname.split('/').pop();
 
         const api = {
             getMovie: async (id) => {
                 const res = await fetch(`/api/movies/${id}`);
-                if (!res.ok) throw new Error('Фильм не найден');
+                if (!res.ok) {
+                    const text = await res.text();
+                    let errorMsg = 'Фильм не найден';
+                    try {
+                        const err = JSON.parse(text);
+                        errorMsg = err.error || errorMsg;
+                    } catch (e) {
+                        errorMsg = text || errorMsg;
+                    }
+                    throw new Error(errorMsg);
+                }
                 return res.json();
             },
+            
             getReviews: async (id) => {
                 const res = await fetch(`/api/movies/${id}/reviews`);
+                if (!res.ok) {
+                    const text = await res.text();
+                    let errorMsg = 'Ошибка загрузки отзывов';
+                    try {
+                        const err = JSON.parse(text);
+                        errorMsg = err.error || errorMsg;
+                    } catch (e) {
+                        errorMsg = text || errorMsg;
+                    }
+                    throw new Error(errorMsg);
+                }
                 const data = await res.json();
                 return data.data || [];
             },
+            
             addReview: async (movieId, rating, comment) => {
                 const token = localStorage.getItem('token');
                 if (!token) throw new Error('Необходимо войти');
@@ -50,11 +400,20 @@
                     body: JSON.stringify({ rating, comment })
                 });
                 if (!res.ok) {
-                    const err = await res.json();
-                    throw new Error(err.error || 'Ошибка');
+                    const text = await res.text();
+                    let errorMsg = 'Ошибка добавления отзыва';
+                    try {
+                        const err = JSON.parse(text);
+                        errorMsg = err.error || errorMsg;
+                    } catch (e) {
+                        errorMsg = text || errorMsg;
+                    }
+                    throw new Error(errorMsg);
                 }
-                return res.json();
+                const text = await res.text();
+                return text ? JSON.parse(text) : { message: 'success' };
             },
+            
             deleteReview: async (reviewId) => {
                 const token = localStorage.getItem('token');
                 if (!token) throw new Error('Необходимо войти');
@@ -64,420 +423,189 @@
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                if (!res.ok) throw new Error('Ошибка удаления');
+                if (!res.ok) {
+                    const text = await res.text();
+                    let errorMsg = 'Ошибка удаления отзыва';
+                    try {
+                        const err = JSON.parse(text);
+                        errorMsg = err.error || errorMsg;
+                    } catch (e) {
+                        errorMsg = text || errorMsg;
+                    }
+                    throw new Error(errorMsg);
+                }
             }
         };
 
-        function Header() {
-            const headerStyle = {
-                position: 'fixed',
-                top: 0,
-                width: '100%',
-                zIndex: 1000,
-                background: '#0f0f0f',
-                padding: '20px 50px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                borderBottom: '1px solid #333'
-            };
+        document.addEventListener('DOMContentLoaded', async () => {
+            const savedUser = localStorage.getItem('user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+            }
 
-            const logoStyle = {
-                fontSize: '28px',
-                fontWeight: 'bold',
-                color: '#e50914',
-                textDecoration: 'none'
-            };
+            await loadData();
+        });
 
-            const navStyle = {
-                display: 'flex',
-                gap: '30px',
-                alignItems: 'center'
-            };
-
-            const linkStyle = {
-                color: '#fff',
-                textDecoration: 'none',
-                fontSize: '16px',
-                transition: 'color 0.3s'
-            };
-
-            return (
-                <header style={headerStyle}>
-                    <a href="/app" style={logoStyle}>MOVIE</a>
-                    <nav style={navStyle}>
-                        <a href="/app" style={linkStyle}>Главная</a>
-                        <a href="/movies" style={linkStyle}>Каталог</a>
-                    </nav>
-                </header>
-            );
+        async function loadData() {
+            try {
+                const [movieData, reviewsData] = await Promise.all([
+                    api.getMovie(movieId),
+                    api.getReviews(movieId)
+                ]);
+                
+                movie = movieData;
+                reviews = reviewsData;
+                
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('content').classList.remove('hidden');
+                
+                renderContent();
+            } catch (err) {
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('error').textContent = 'Ошибка: ' + err.message;
+                document.getElementById('error').classList.remove('hidden');
+            }
         }
 
-        function MovieDetails() {
-            const [movie, setMovie] = useState(null);
-            const [reviews, setReviews] = useState([]);
-            const [loading, setLoading] = useState(true);
-            const [error, setError] = useState('');
-            const [rating, setRating] = useState(5);
-            const [comment, setComment] = useState('');
-            const [submitting, setSubmitting] = useState(false);
-            const [user, setUser] = useState(null);
-
-            const movieId = window.location.pathname.split('/').pop();
-
-            useEffect(() => {
-                const savedUser = localStorage.getItem('user');
-                if (savedUser) {
-                    setUser(JSON.parse(savedUser));
-                }
-                loadData();
-            }, []);
-
-            const loadData = async () => {
-                try {
-                    const [movieData, reviewsData] = await Promise.all([
-                        api.getMovie(movieId),
-                        api.getReviews(movieId)
-                    ]);
-                    setMovie(movieData);
-                    setReviews(reviewsData);
-                } catch (err) {
-                    setError(err.message);
-                } finally {
-                    setLoading(false);
-                }
-            };
-
-            const handleSubmitReview = async (e) => {
-                e.preventDefault();
-                setSubmitting(true);
-                try {
-                    await api.addReview(movieId, rating, comment);
-                    setComment('');
-                    setRating(5);
-                    await loadData();
-                } catch (err) {
-                    alert(err.message);
-                } finally {
-                    setSubmitting(false);
-                }
-            };
-
-            const handleDeleteReview = async (reviewId) => {
-                if (!confirm('Удалить отзыв?')) return;
-                try {
-                    await api.deleteReview(reviewId);
-                    await loadData();
-                } catch (err) {
-                    alert(err.message);
-                }
-            };
-
-            const containerStyle = {
-                padding: '120px 50px 50px',
-                minHeight: '100vh',
-                maxWidth: '1200px',
-                margin: '0 auto'
-            };
-
-            const heroStyle = {
-                display: 'flex',
-                gap: '40px',
-                marginBottom: '50px',
-                flexWrap: 'wrap'
-            };
-
-            const posterStyle = {
-                width: '300px',
-                height: '450px',
-                objectFit: 'cover',
-                borderRadius: '8px',
-                boxShadow: '0 4px 8px rgba(0,0,0,0.5)'
-            };
-
-            const infoStyle = {
-                flex: 1,
-                minWidth: '300px'
-            };
-
-            const titleStyle = {
-                fontSize: '48px',
-                fontWeight: 'bold',
-                marginBottom: '15px'
-            };
-
-            const metaStyle = {
-                fontSize: '18px',
-                color: '#b3b3b3',
-                marginBottom: '20px'
-            };
-
-            const descStyle = {
-                fontSize: '16px',
-                lineHeight: '1.8',
-                color: '#e5e5e5'
-            };
-
-            const sectionStyle = {
-                marginTop: '50px'
-            };
-
-            const sectionTitleStyle = {
-                fontSize: '28px',
-                marginBottom: '30px',
-                fontWeight: 'bold'
-            };
-
-            const formStyle = {
-                background: '#1a1a1a',
-                padding: '30px',
-                borderRadius: '8px',
-                marginBottom: '30px',
-                border: '1px solid #333'
-            };
-
-            const formGroupStyle = {
-                marginBottom: '20px'
-            };
-
-            const labelStyle = {
-                display: 'block',
-                marginBottom: '10px',
-                fontSize: '16px',
-                fontWeight: 'bold'
-            };
-
-            const ratingInputStyle = {
-                width: '80px',
-                padding: '10px',
-                background: '#333',
-                border: '1px solid #444',
-                borderRadius: '4px',
-                color: '#fff',
-                fontSize: '16px'
-            };
-
-            const textareaStyle = {
-                width: '100%',
-                minHeight: '120px',
-                padding: '15px',
-                background: '#333',
-                border: '1px solid #444',
-                borderRadius: '4px',
-                color: '#fff',
-                fontSize: '16px',
-                fontFamily: 'inherit',
-                resize: 'vertical'
-            };
-
-            const submitButtonStyle = {
-                padding: '12px 30px',
-                background: '#e50914',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '4px',
-                fontSize: '16px',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                transition: 'background 0.3s'
-            };
-
-            const reviewItemStyle = {
-                background: '#1a1a1a',
-                padding: '20px',
-                borderRadius: '8px',
-                marginBottom: '15px',
-                border: '1px solid #333'
-            };
-
-            const reviewHeaderStyle = {
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '10px'
-            };
-
-            const reviewRatingStyle = {
-                fontSize: '18px',
-                fontWeight: 'bold',
-                color: '#ffd700'
-            };
-
-            const reviewDateStyle = {
-                fontSize: '14px',
-                color: '#b3b3b3'
-            };
-
-            const reviewCommentStyle = {
-                fontSize: '16px',
-                lineHeight: '1.6',
-                color: '#e5e5e5',
-                marginTop: '10px'
-            };
-
-            const deleteButtonStyle = {
-                padding: '5px 10px',
-                background: '#e50914',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '4px',
-                fontSize: '12px',
-                cursor: 'pointer',
-                marginTop: '10px'
-            };
-
-            const loadingTextStyle = {
-                textAlign: 'center',
-                fontSize: '24px'
-            };
-
-            const errorTextStyle = {
-                color: '#e50914',
-                fontSize: '18px'
-            };
-
-            const loginPromptStyle = {
-                ...formStyle,
-                textAlign: 'center',
-                color: '#b3b3b3'
-            };
-
-            const loginLinkStyle = {
-                color: '#e50914',
-                textDecoration: 'none'
-            };
-
-            const emptyReviewsStyle = {
-                textAlign: 'center',
-                color: '#b3b3b3',
-                fontSize: '18px'
-            };
-
-            if (loading) {
-                return (
-                    <div>
-                        <Header />
-                        <div style={containerStyle}>
-                            <div style={loadingTextStyle}>Загрузка...</div>
+        function renderContent() {
+            const content = document.getElementById('content');
+            
+            content.innerHTML = `
+                <div class="hero">
+                    <img 
+                        src="${movie.poster_path}" 
+                        alt="${movie.title}"
+                        class="poster"
+                        onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'"
+                    >
+                    <div class="info">
+                        <h1 class="title">${movie.title}</h1>
+                        <div class="meta">
+                            Год: ${movie.year}
                         </div>
-                    </div>
-                );
-            }
-
-            if (error) {
-                return (
-                    <div>
-                        <Header />
-                        <div style={containerStyle}>
-                            <div style={errorTextStyle}>Ошибка: {error}</div>
-                        </div>
-                    </div>
-                );
-            }
-
-            if (!movie) return null;
-
-            return (
-                <div>
-                    <Header />
-                    <div style={containerStyle}>
-                        <div style={heroStyle}>
-                            <img
-                                src={movie.poster_path}
-                                alt={movie.title}
-                                style={posterStyle}
-                                onError={(e) => e.target.src = 'https://via.placeholder.com/300x450?text=No+Image'}
-                            />
-                            <div style={infoStyle}>
-                                <h1 style={titleStyle}>{movie.title}</h1>
-                                <div style={metaStyle}>
-                                    Год: {movie.year} | Жанр: {movie.genre || 'Не указан'}
-                                </div>
-                                <p style={descStyle}>{movie.description}</p>
-                            </div>
-                        </div>
-
-                        <div style={sectionStyle}>
-                            <h2 style={sectionTitleStyle}>Отзывы ({reviews.length})</h2>
-
-                            {user && (
-                                <form onSubmit={handleSubmitReview} style={formStyle}>
-                                    <div style={formGroupStyle}>
-                                        <label style={labelStyle}>Оценка (1-5):</label>
-                                        <input
-                                            type="number"
-                                            min="1"
-                                            max="5"
-                                            value={rating}
-                                            onChange={(e) => setRating(parseInt(e.target.value))}
-                                            style={ratingInputStyle}
-                                            required
-                                        />
-                                    </div>
-                                    <div style={formGroupStyle}>
-                                        <label style={labelStyle}>Ваш отзыв:</label>
-                                        <textarea
-                                            value={comment}
-                                            onChange={(e) => setComment(e.target.value)}
-                                            placeholder="Напишите ваш отзыв..."
-                                            required
-                                            style={textareaStyle}
-                                        />
-                                    </div>
-                                    <button type="submit" style={submitButtonStyle} disabled={submitting}>
-                                        {submitting ? 'Отправка...' : 'Отправить отзыв'}
-                                    </button>
-                                </form>
-                            )}
-
-                            {!user && (
-                                <div style={loginPromptStyle}>
-                                    <a href="/app" style={loginLinkStyle}>
-                                        Войдите, чтобы оставить отзыв
-                                    </a>
-                                </div>
-                            )}
-
-                            <div>
-                                {reviews.length === 0 ? (
-                                    <div style={emptyReviewsStyle}>
-                                        Пока нет отзывов
-                                    </div>
-                                ) : (
-                                    reviews.map(review => (
-                                        <div key={review.id} style={reviewItemStyle}>
-                                            <div style={reviewHeaderStyle}>
-                                                <div style={reviewRatingStyle}>
-                                                    {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)} {review.rating}/5
-                                                </div>
-                                                <div style={reviewDateStyle}>
-                                                    {new Date(review.createdAt).toLocaleDateString('ru-RU', {
-                                                        year: 'numeric',
-                                                        month: 'long',
-                                                        day: 'numeric'
-                                                    })}
-                                                </div>
-                                            </div>
-                                            <p style={reviewCommentStyle}>{review.comment}</p>
-                                            {user && (user.userId === review.userId || user.role === 'admin') && (
-                                                <button
-                                                    style={deleteButtonStyle}
-                                                    onClick={() => handleDeleteReview(review.id)}
-                                                >
-                                                    Удалить
-                                                </button>
-                                            )}
-                                        </div>
-                                    ))
-                                )}
-                            </div>
-                        </div>
+                        <p class="description">${movie.description}</p>
+                        ${movie.video_path ? `
+                            <button class="btn-play" onclick="window.open('${movie.video_path}', '_blank')">
+                                <i class="fas fa-play"></i> Смотреть фильм
+                            </button>
+                        ` : ''}
                     </div>
                 </div>
-            );
+
+                <div class="section">
+                    <h2 class="section-title">Отзывы (${reviews.length})</h2>
+                    
+                    ${currentUser ? `
+                        <form class="review-form" id="review-form">
+                            <div class="form-group">
+                                <label>Оценка (1-5):</label>
+                                <input 
+                                    type="number" 
+                                    id="rating" 
+                                    class="rating-input"
+                                    min="1" 
+                                    max="5" 
+                                    value="5" 
+                                    required
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label>Ваш отзыв:</label>
+                                <textarea 
+                                    id="comment" 
+                                    class="textarea"
+                                    placeholder="Напишите ваш отзыв..."
+                                    required
+                                ></textarea>
+                            </div>
+                            <button type="submit" class="btn-submit" id="submit-btn">
+                                Отправить отзыв
+                            </button>
+                        </form>
+                    ` : `
+                        <div class="login-prompt">
+                            <a href="/app">Войдите, чтобы оставить отзыв</a>
+                        </div>
+                    `}
+
+                    <div id="reviews-container">
+                        ${renderReviews()}
+                    </div>
+                </div>
+            `;
+
+            if (currentUser) {
+                document.getElementById('review-form').addEventListener('submit', handleSubmitReview);
+            }
         }
 
-        ReactDOM.render(<MovieDetails />, document.getElementById('root'));
+        function renderReviews() {
+            if (reviews.length === 0) {
+                return '<div class="empty-reviews">Пока нет отзывов</div>';
+            }
+
+            return reviews.map(review => `
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="review-rating">
+                            ${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)} ${review.rating}/5
+                        </div>
+                        <div class="review-date">
+                            ${formatDate(review.createdAt)}
+                        </div>
+                    </div>
+                    <p class="review-comment">${review.comment}</p>
+                    ${currentUser && (currentUser.userId === review.userId || currentUser.role === 'ADMIN') ? `
+                        <button class="btn-delete" onclick="handleDeleteReview('${review.id}')">
+                            Удалить
+                        </button>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        async function handleSubmitReview(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submit-btn');
+            const rating = parseInt(document.getElementById('rating').value);
+            const comment = document.getElementById('comment').value;
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Отправка...';
+
+            try {
+                await api.addReview(movieId, rating, comment);
+                await loadData();
+                document.getElementById('comment').value = '';
+                document.getElementById('rating').value = '5';
+            } catch (err) {
+                alert(err.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Отправить отзыв';
+            }
+        }
+
+        async function handleDeleteReview(reviewId) {
+            if (!confirm('Удалить отзыв?')) return;
+            
+            try {
+                await api.deleteReview(reviewId);
+                await loadData();
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ru-RU', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
     </script>
 </body>
 </html>

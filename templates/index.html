@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Platform - Главная</title>
+    <title>{{.Title}}</title>
     <style>
         * {
             margin: 0;
@@ -73,9 +73,9 @@
         }
     </style>
 </head>
-<body>
+<body data-page="{{.Page}}" data-year="{{.Year}}" data-app="{{.AppName}}">
     <div class="container">
-        <h1>🎬 Movie Platform</h1>
+        <h1>🎬 {{.AppName}}</h1>
         <p style="font-size: 1.2em; margin-bottom: 20px;">Добро пожаловать на платформу фильмов</p>
         
         <div class="info">
@@ -102,9 +102,10 @@
         </div>
 
         <div class="links">
-            <a href="/movies">Список фильмов (React)</a>
+            <a href="/movies">Список фильмов</a>
             <a href="/api/movies">API: Список фильмов</a>
         </div>
+        <p style="margin-top: 20px; opacity: 0.8;">© {{.Year}} {{.AppName}}</p>
     </div>
 </body>
 </html>

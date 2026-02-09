@@ -74,7 +74,7 @@ func UpdateAllTokens(userId, token, refreshToken string) error {
 	updateData := bson.M{
 		"$set": bson.M{
 			"token":         token,
-			"refresh_token": refreshToken,
+			"refreshToken":  refreshToken,
 			"updated_at":    time.Now(),
 		},
 	}

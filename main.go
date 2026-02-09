@@ -45,7 +45,7 @@ func main() {
 
 	log.Printf("Server starting on port %s", port)
 	log.Printf("Go Template: http://localhost:%s/", port)
-	log.Printf("Movies (React): http://localhost:%s/movies", port)
+	log.Printf("Movies:       http://localhost:%s/movies", port)
 	log.Printf("API:          http://localhost:%s/api", port)
 
 	r.Run(":" + port)

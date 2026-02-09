@@ -10,17 +10,9 @@ import (
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
-type HomeData struct {
-	TotalMovies  int64
-	TotalUsers   int64
-	TotalReviews int64
-}
-
 func GetHome(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
-
-	var data HomeData
 
 	movieCollection := database.GetCollection("movies")
 	userCollection := database.GetCollection("users")
@@ -30,9 +22,10 @@ func GetHome(c *gin.Context) {
 	userCount, _ := userCollection.CountDocuments(ctx, bson.M{})
 	reviewCount, _ := reviewCollection.CountDocuments(ctx, bson.M{})
 
-	data.TotalMovies = movieCount
-	data.TotalUsers = userCount
-	data.TotalReviews = reviewCount
+	data := BaseViewData("Movie Platform - Главная", "home")
+	data["TotalMovies"] = movieCount
+	data["TotalUsers"] = userCount
+	data["TotalReviews"] = reviewCount
 
 	c.HTML(http.StatusOK, "index.html", data)
 }

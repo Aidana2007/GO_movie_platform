@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Профиль - Movie Platform</title>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <title>{{.Title}}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,220 +11,262 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #0f0f0f;
             color: #fff;
         }
-    </style>
-</head>
-<body>
-    <div id="root"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
-
-        function Header({ onLogout }) {
-            const headerStyle = {
-                position: 'fixed',
-                top: 0,
-                width: '100%',
-                zIndex: 1000,
-                background: '#0f0f0f',
-                padding: '20px 50px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                borderBottom: '1px solid #333'
-            };
-
-            const logoStyle = {
-                fontSize: '28px',
-                fontWeight: 'bold',
-                color: '#e50914',
-                textDecoration: 'none'
-            };
-
-            const navStyle = {
-                display: 'flex',
-                gap: '30px',
-                alignItems: 'center'
-            };
-
-            const linkStyle = {
-                color: '#fff',
-                textDecoration: 'none',
-                fontSize: '16px',
-                transition: 'color 0.3s'
-            };
-
-            const logoutBtnStyle = {
-                padding: '8px 20px',
-                background: 'transparent',
-                color: '#fff',
-                border: '1px solid #fff',
-                borderRadius: '4px',
-                fontSize: '14px',
-                cursor: 'pointer'
-            };
-
-            return (
-                <header style={headerStyle}>
-                    <a href="/app" style={logoStyle}>MOVIE</a>
-                    <nav style={navStyle}>
-                        <a href="/app" style={linkStyle}>Главная</a>
-                        <a href="/movies" style={linkStyle}>Каталог</a>
-                        <button style={logoutBtnStyle} onClick={onLogout}>
-                            Выйти
-                        </button>
-                    </nav>
-                </header>
-            );
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: #0f0f0f;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
         }
 
-        function Profile() {
-            const [user, setUser] = useState(null);
-            const [loading, setLoading] = useState(true);
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #e50914;
+            text-decoration: none;
+        }
 
-            useEffect(() => {
-                const savedUser = localStorage.getItem('user');
-                if (!savedUser) {
-                    window.location.href = '/app';
-                    return;
-                }
-                setUser(JSON.parse(savedUser));
-                setLoading(false);
-            }, []);
+        .nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
 
-            const handleLogout = () => {
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
+        .nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: #e50914;
+        }
+        .nav a.active {
+            color: #e50914;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            background: transparent;
+            color: #fff;
+            border: 1px solid #fff;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #fff;
+            color: #0f0f0f;
+        }
+
+        .container {
+            padding: 120px 50px 50px;
+            min-height: 100vh;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: #1a1a1a;
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #e50914;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold;
+            margin: 0 auto 30px;
+        }
+
+        .title {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .info-group {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #333;
+        }
+
+        .info-group:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            font-size: 14px;
+            color: #b3b3b3;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .value {
+            font-size: 20px;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #333;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .badge.admin {
+            background: #e50914;
+        }
+
+        .loading-text {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 50px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #333;
+            border-top: 5px solid #e50914;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 50px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            .container {
+                padding: 100px 20px 30px;
+            }
+            .card {
+                padding: 30px 20px;
+            }
+            .title {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body data-page="{{.Page}}" data-year="{{.Year}}" data-app="{{.AppName}}">
+    <header class="header">
+        <a href="/app" class="logo">{{.AppName}}</a>
+        <nav class="nav">
+            <a href="/app" class="{{if eq .Page "app"}}active{{end}}">Главная</a>
+            <a href="/movies" class="{{if eq .Page "movies"}}active{{end}}">Каталог</a>
+            <button class="btn" onclick="handleLogout()">Выйти</button>
+        </nav>
+    </header>
+
+    <div id="loading" class="container">
+        <div class="spinner"></div>
+        <div class="loading-text">Загрузка...</div>
+    </div>
+
+    <div id="content" class="container hidden"></div>
+
+    <script>
+        let currentUser = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedUser = localStorage.getItem('user');
+            if (!savedUser) {
                 window.location.href = '/app';
-            };
-
-            const containerStyle = {
-                padding: '120px 50px 50px',
-                minHeight: '100vh',
-                maxWidth: '800px',
-                margin: '0 auto'
-            };
-
-            const cardStyle = {
-                background: '#1a1a1a',
-                padding: '40px',
-                borderRadius: '8px',
-                border: '1px solid #333'
-            };
-
-            const avatarStyle = {
-                width: '120px',
-                height: '120px',
-                borderRadius: '50%',
-                background: '#e50914',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '48px',
-                fontWeight: 'bold',
-                margin: '0 auto 30px'
-            };
-
-            const titleStyle = {
-                fontSize: '36px',
-                fontWeight: 'bold',
-                marginBottom: '30px',
-                textAlign: 'center'
-            };
-
-            const infoGroupStyle = {
-                marginBottom: '25px',
-                paddingBottom: '25px',
-                borderBottom: '1px solid #333'
-            };
-
-            const labelStyle = {
-                fontSize: '14px',
-                color: '#b3b3b3',
-                marginBottom: '8px',
-                textTransform: 'uppercase',
-                letterSpacing: '1px'
-            };
-
-            const valueStyle = {
-                fontSize: '20px',
-                color: '#fff',
-                fontWeight: '500'
-            };
-
-            const badgeStyle = {
-                display: 'inline-block',
-                padding: '5px 15px',
-                background: user?.role === 'admin' ? '#e50914' : '#333',
-                borderRadius: '20px',
-                fontSize: '14px',
-                fontWeight: 'bold',
-                marginTop: '10px'
-            };
-
-            const loadingTextStyle = {
-                textAlign: 'center',
-                fontSize: '24px'
-            };
-
-            if (loading) {
-                return (
-                    <div>
-                        <Header onLogout={handleLogout} />
-                        <div style={containerStyle}>
-                            <div style={loadingTextStyle}>Загрузка...</div>
-                        </div>
-                    </div>
-                );
+                return;
             }
 
-            if (!user) return null;
+            currentUser = JSON.parse(savedUser);
+            
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('content').classList.remove('hidden');
+            
+            renderProfile();
+        });
 
-            return (
-                <div>
-                    <Header onLogout={handleLogout} />
-                    <div style={containerStyle}>
-                        <div style={cardStyle}>
-                            <div style={avatarStyle}>
-                                {user.firstName?.[0]?.toUpperCase() || 'U'}
-                            </div>
-                            <h1 style={titleStyle}>Профиль</h1>
+        function renderProfile() {
+            const content = document.getElementById('content');
+            
+            const isAdmin = currentUser.role === 'ADMIN' || currentUser.role === 'admin';
+            
+            content.innerHTML = `
+                <div class="card">
+                    <div class="avatar">
+                        ${currentUser.firstName[0].toUpperCase()}
+                    </div>
+                    <h1 class="title">Профиль</h1>
 
-                            <div style={infoGroupStyle}>
-                                <div style={labelStyle}>Имя</div>
-                                <div style={valueStyle}>{user.firstName || 'Не указано'}</div>
-                            </div>
+                    <div class="info-group">
+                        <div class="label">Имя</div>
+                        <div class="value">${currentUser.firstName || 'Не указано'}</div>
+                    </div>
 
-                            <div style={infoGroupStyle}>
-                                <div style={labelStyle}>Фамилия</div>
-                                <div style={valueStyle}>{user.lastName || 'Не указано'}</div>
-                            </div>
+                    <div class="info-group">
+                        <div class="label">Фамилия</div>
+                        <div class="value">${currentUser.lastName || 'Не указано'}</div>
+                    </div>
 
-                            <div style={infoGroupStyle}>
-                                <div style={labelStyle}>Email</div>
-                                <div style={valueStyle}>{user.email}</div>
-                            </div>
+                    <div class="info-group">
+                        <div class="label">Email</div>
+                        <div class="value">${currentUser.email}</div>
+                    </div>
 
-                            <div style={infoGroupStyle}>
-                                <div style={labelStyle}>Роль</div>
-                                <div style={valueStyle}>
-                                    {user.role === 'admin' ? 'Администратор' : 'Пользователь'}
-                                    <span style={badgeStyle}>
-                                        {user.role === 'admin' ? 'ADMIN' : 'USER'}
-                                    </span>
-                                </div>
-                            </div>
+                    <div class="info-group">
+                        <div class="label">Роль</div>
+                        <div class="value">
+                            ${isAdmin ? 'Администратор' : 'Пользователь'}
+                            <span class="badge ${isAdmin ? 'admin' : ''}">
+                                ${isAdmin ? 'ADMIN' : 'USER'}
+                            </span>
                         </div>
                     </div>
                 </div>
-            );
+            `;
         }
 
-        ReactDOM.render(<Profile />, document.getElementById('root'));
+        function handleLogout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/app';
+        }
     </script>
 </body>
 </html>

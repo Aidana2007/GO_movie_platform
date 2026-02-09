@@ -1,6 +1,6 @@
 # Movie Platform
 
-Платформа для просмотра и обсуждения фильмов с использованием Go (Gin) и React.
+Платформа для просмотра и обсуждения фильмов с использованием Go (Gin) и HTML/JS.
 
 ## Требования проекта
 
@@ -8,7 +8,7 @@
 - ✅ **Front-End (ready html template is ok)** - Go HTML templates в `templates/`
 - ✅ **Usage of golang templating tags** - Используются `{{.TotalMovies}}`, `{{.TotalUsers}}`, `{{.TotalReviews}}`
 - ✅ **Clean code and solid project structure** - Четкое разделение на пакеты
-- ✅ **Bonus: usage of JS framework** - React компоненты встроены в Go templates
+- ✅ **Bonus: usage of JS** - Встроенный JS в Go templates
 
 ## Структура проекта
 
@@ -17,7 +17,7 @@ GO_movie_platform/
 ├── main.go                 # Точка входа
 ├── controllers/            # Обработчики запросов
 │   ├── home.go            # Главная страница (Go template)
-│   ├── movies.go          # Страницы с React
+│   ├── movies.go          # Страницы с HTML + JS
 │   ├── movie.go           # API для фильмов
 │   ├── review.go          # API для отзывов
 │   └── user.go            # API для пользователей
@@ -28,10 +28,10 @@ GO_movie_platform/
 ├── routes/                # Маршруты
 ├── database/              # Подключение к БД
 ├── utils/                 # Утилиты
-├── templates/             # Go HTML templates с React
+├── templates/             # Go HTML templates с HTML + JS
 │   ├── index.html        # Главная (Go template)
-│   ├── movies.html       # Список фильмов (React)
-│   └── movie-details.html # Детали фильма (React)
+│   ├── movies.html       # Список фильмов
+│   └── movie-details.html # Детали фильма
 └── .env                   # Переменные окружения
 ```
 
@@ -67,7 +67,7 @@ go run main.go
 
 **URLs:**
 - Главная (Go Template): http://localhost:8080/
-- Фильмы (React): http://localhost:8080/movies
+- Фильмы: http://localhost:8080/movies
 - API: http://localhost:8080/api
 
 ## API Endpoints
@@ -98,12 +98,12 @@ go run main.go
 
 **Frontend:**
 - Go HTML Templates (требование)
-- React 18 (CDN, встроен в templates)
+- Vanilla JS (fetch API)
 - Vanilla CSS
 
 ## Особенности
 
-- **Простота**: React загружается через CDN, не нужен npm/node
+- **Простота**: JS встроен, не нужен npm/node
 - **Go Templates**: Главная страница использует Go templating
-- **React**: Компоненты встроены прямо в HTML через Babel
+- **JS**: Скрипты встроены прямо в HTML
 - **Один сервер**: Все работает на одном Go сервере
