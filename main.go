@@ -43,10 +43,7 @@ func main() {
 		port = "8080"
 	}
 
-	log.Printf("Server starting on port %s", port)
-	log.Printf("Go Template: http://localhost:%s/", port)
-	log.Printf("Movies:       http://localhost:%s/movies", port)
-	log.Printf("API:          http://localhost:%s/api", port)
+	log.Printf("Server: http://localhost:%s", port)
 
 	r.Run(":" + port)
 }
