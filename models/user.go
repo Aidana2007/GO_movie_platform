@@ -1,13 +1,15 @@
 package models
 
+import "go.mongodb.org/mongo-driver/v2/bson"
+
 type User struct {
-	ID           string `json:"id" bson:"_id,omitempty"`
+	ID           bson.ObjectID `json:"id" bson:"_id,omitempty"`
 	UserId       string `json:"userId" bson:"userId"`
 	FirstName    string `json:"firstName" bson:"firstName" validate:"required,min=2,max=100"`
 	LastName     string `json:"lastName" bson:"lastName" validate:"required,min=2,max=100"`
 	Email        string `json:"email" bson:"email" validate:"required,email"`
 	Password     string `json:"password" bson:"password" validate:"required,min=6,max=32"`
-	Role         string `json:"role" bson:"role" validate:"one of=ADMIN USER"`
+	Role         string `json:"role" bson:"role" validate:"omitempty,oneof=ADMIN USER"`
 	Token        string `json:"token" bson:"token"`
 	RefreshToken string `json:"refreshToken" bson:"refreshToken"`
 }

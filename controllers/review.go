@@ -54,15 +54,15 @@ func AddReview(c *gin.Context) {
 		return
 	}
 
+	review.MovieID = movieID
+	review.UserID = userClaims.UserId
+	review.CreatedAt = time.Now().Format(time.RFC3339)
+
 	validate := validator.New()
 	if err := validate.Struct(review); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	review.MovieID = movieID
-	review.UserID = userClaims.UserId
-	review.CreatedAt = time.Now().Format(time.RFC3339)
 
 	count, err = getReviewCollection().CountDocuments(ctx, bson.M{
 		"movie_id": movieID,
@@ -144,7 +144,7 @@ func DeleteReview(c *gin.Context) {
 		return
 	}
 
-	if review.UserID != userClaims.UserId {
+	if review.UserID != userClaims.UserId && userClaims.Role != "ADMIN" {
 		c.JSON(http.StatusForbidden, gin.H{"error": "you can only delete your own review"})
 		return
 	}

@@ -35,6 +35,8 @@ func RegisterUser(c *gin.Context) {
 		return
 	}
 
+	user.Role = "USER"
+
 	validate := validator.New()
 	if err := validate.Struct(user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -81,6 +83,12 @@ func LoginUser(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&userLogin); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid input data"})
+		return
+	}
+
+	validate := validator.New()
+	if err := validate.Struct(userLogin); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
