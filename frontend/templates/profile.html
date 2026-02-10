@@ -1,272 +1,54 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{.Title}}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+{{define "title"}}Profile{{end}}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0f0f0f;
-            color: #fff;
-        }
-
-        .header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            background: #0f0f0f;
-            padding: 20px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #333;
-        }
-
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-            color: #e50914;
-            text-decoration: none;
-        }
-
-        .nav {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-        }
-
-        .nav a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 16px;
-            transition: color 0.3s;
-        }
-
-        .nav a:hover {
-            color: #e50914;
-        }
-        .nav a.active {
-            color: #e50914;
-        }
-
-        .btn {
-            padding: 8px 20px;
-            background: transparent;
-            color: #fff;
-            border: 1px solid #fff;
-            border-radius: 4px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn:hover {
-            background: #fff;
-            color: #0f0f0f;
-        }
-
-        .container {
-            padding: 120px 50px 50px;
-            min-height: 100vh;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .card {
-            background: #1a1a1a;
-            padding: 40px;
-            border-radius: 8px;
-            border: 1px solid #333;
-        }
-
-        .avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: #e50914;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            font-weight: bold;
-            margin: 0 auto 30px;
-        }
-
-        .title {
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .info-group {
-            margin-bottom: 25px;
-            padding-bottom: 25px;
-            border-bottom: 1px solid #333;
-        }
-
-        .info-group:last-child {
-            border-bottom: none;
-        }
-
-        .label {
-            font-size: 14px;
-            color: #b3b3b3;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .value {
-            font-size: 20px;
-            color: #fff;
-            font-weight: 500;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 5px 15px;
-            background: #333;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-        .badge.admin {
-            background: #e50914;
-        }
-
-        .loading-text {
-            text-align: center;
-            font-size: 24px;
-            margin-top: 50px;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #333;
-            border-top: 5px solid #e50914;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 50px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        @media (max-width: 768px) {
-            .header {
-                padding: 15px 20px;
-            }
-            .container {
-                padding: 100px 20px 30px;
-            }
-            .card {
-                padding: 30px 20px;
-            }
-            .title {
-                font-size: 28px;
-            }
-        }
-    </style>
-</head>
-<body data-page="{{.Page}}" data-year="{{.Year}}" data-app="{{.AppName}}">
-    <header class="header">
-        <a href="/app" class="logo">{{.AppName}}</a>
-        <nav class="nav">
-            <a href="/app" class="{{if eq .Page "app"}}active{{end}}">Главная</a>
-            <a href="/movies" class="{{if eq .Page "movies"}}active{{end}}">Каталог</a>
-            <button class="btn" onclick="handleLogout()">Выйти</button>
-        </nav>
-    </header>
-
-    <div id="loading" class="container">
-        <div class="spinner"></div>
-        <div class="loading-text">Загрузка...</div>
-    </div>
-
-    <div id="content" class="container hidden"></div>
-
-    <script>
-        let currentUser = null;
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedUser = localStorage.getItem('user');
-            if (!savedUser) {
-                window.location.href = '/app';
-                return;
-            }
-
-            currentUser = JSON.parse(savedUser);
-            
-            document.getElementById('loading').classList.add('hidden');
-            document.getElementById('content').classList.remove('hidden');
-            
-            renderProfile();
-        });
-
-        function renderProfile() {
-            const content = document.getElementById('content');
-            
-            const isAdmin = currentUser.role === 'ADMIN' || currentUser.role === 'admin';
-            
-            content.innerHTML = `
-                <div class="card">
-                    <div class="avatar">
-                        ${currentUser.firstName[0].toUpperCase()}
-                    </div>
-                    <h1 class="title">Профиль</h1>
-
-                    <div class="info-group">
-                        <div class="label">Имя</div>
-                        <div class="value">${currentUser.firstName || 'Не указано'}</div>
-                    </div>
-
-                    <div class="info-group">
-                        <div class="label">Фамилия</div>
-                        <div class="value">${currentUser.lastName || 'Не указано'}</div>
-                    </div>
-
-                    <div class="info-group">
-                        <div class="label">Email</div>
-                        <div class="value">${currentUser.email}</div>
-                    </div>
-
-                    <div class="info-group">
-                        <div class="label">Роль</div>
-                        <div class="value">
-                            ${isAdmin ? 'Администратор' : 'Пользователь'}
-                            <span class="badge ${isAdmin ? 'admin' : ''}">
-                                ${isAdmin ? 'ADMIN' : 'USER'}
-                            </span>
-                        </div>
-                    </div>
+{{define "content"}}
+<div class="container">
+    <section class="profile-section">
+        <h1>My Profile</h1>
+        <div class="profile-card">
+            <div class="profile-info">
+                <div class="profile-field">
+                    <label>Username:</label>
+                    <span>{{.User.Username}}</span>
                 </div>
-            `;
-        }
+                <div class="profile-field">
+                    <label>Email:</label>
+                    <span>{{.User.Email}}</span>
+                </div>
+                <div class="profile-field">
+                    <label>Role:</label>
+                    <span>{{.User.Role}}</span>
+                </div>
+                <div class="profile-field">
+                    <label>Member Since:</label>
+                    <span>{{.User.CreatedAt.Format "January 2, 2006"}}</span>
+                </div>
+            </div>
+        </div>
 
-        function handleLogout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = '/app';
-        }
-    </script>
-</body>
-</html>
+        <div class="profile-stats">
+            <h2>Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="watchlist-count">0</h3>
+                    <p>Movies in Watchlist</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="friends-count">0</h3>
+                    <p>Friends</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="friends-list">
+            <h2>My Friends</h2>
+            <div id="friends-list">
+                <!-- Friends will be loaded here -->
+            </div>
+        </div>
+    </section>
+</div>
+{{end}}
+
+{{define "scripts"}}
+<script src="../static/js/profile.js"></script>
+{{end}}

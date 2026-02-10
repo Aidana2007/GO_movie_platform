@@ -1,0 +1,55 @@
+{{define "title"}}{{.TargetUser.Username}}'s Profile{{end}}
+
+{{define "content"}}
+<div class="container">
+    <section class="profile-section">
+        <h1>{{.TargetUser.Username}}'s Profile</h1>
+
+        <div class="profile-card">
+            <div class="profile-field">
+                <label>Username:</label>
+                <span>{{.TargetUser.Username}}</span>
+            </div>
+            <div class="profile-field">
+                <label>Member Since:</label>
+                <span>{{.TargetUser.CreatedAt.Format "January 2, 2006"}}</span>
+            </div>
+            <div class="profile-field">
+                <label>Friends:</label>
+                <span>{{len .Friends}}</span>
+            </div>
+        </div>
+
+        {{if .User}}
+        {{if ne .User.ID .TargetUser.ID}}
+        <div style="margin-bottom: 30px;">
+            {{if .IsFriend}}
+            <button onclick="removeFriend('{{.TargetUser.ID.Hex}}')" class="btn btn-secondary">Remove Friend</button>
+            {{else if .HasPendingRequest}}
+            <button class="btn btn-secondary" disabled>Friend Request Pending</button>
+            {{else}}
+            <button onclick="sendFriendRequest('{{.TargetUser.ID.Hex}}')" class="btn btn-primary">Add Friend</button>
+            {{end}}
+        </div>
+        {{end}}
+        {{end}}
+
+        <div class="friends-list">
+            <h2>Friends ({{len .Friends}})</h2>
+            {{if .Friends}}
+            {{range .Friends}}
+            <div class="friend-item">
+                <a href="/user/{{.ID.Hex}}">{{.Username}}</a>
+            </div>
+            {{end}}
+            {{else}}
+            <p class="no-results">No friends yet</p>
+            {{end}}
+        </div>
+    </section>
+</div>
+{{end}}
+
+{{define "scripts"}}
+<script src="../static/js/users.js"></script>
+{{end}}
