@@ -4,14 +4,22 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type ContextKey string
 
 const (
-	UserIDKey ContextKey = "user_id"
-	EmailKey  ContextKey = "email"
+	UserIDKey = "user_id"
+	EmailKey  = "email"
+	RoleKey   = "role"
+)
+
+const (
+	RoleUser      = "user"
+	RoleModerator = "moderator"
+	RoleAdmin     = "admin"
 )
 
 type Claims struct {
@@ -47,6 +55,15 @@ func RespondSuccess(w http.ResponseWriter, status int, data interface{}) {
 }
 
 func GetUserIDFromContext(r *http.Request) (primitive.ObjectID, bool) {
-	userID, ok := r.Context().Value(UserIDKey).(primitive.ObjectID)
+	userID, ok := r.Context().Value(ContextKey(UserIDKey)).(primitive.ObjectID)
 	return userID, ok
+}
+
+func GetRoleFromGinContext(c *gin.Context) (string, bool) {
+	role, exists := c.Get(RoleKey)
+	if !exists {
+		return "", false
+	}
+	roleStr, ok := role.(string)
+	return roleStr, ok
 }

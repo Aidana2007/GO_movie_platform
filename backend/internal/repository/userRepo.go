@@ -2,13 +2,14 @@ package repository
 
 import (
 	"context"
-	"github.com/yerkebulan111/movie_smn/internal/model"
+	"github.com/Aidana2007/GO_movie_platform/backend/internal/model"
 
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type UserRepository struct {
@@ -205,6 +206,25 @@ func (r *UserRepository) SearchUsers(query string, limit int) ([]*model.User, er
 	}
 
 	return users, nil
+}
+
+// GetRoleByID fetches only the role field for a user. Used by RBAC middleware
+// to avoid loading the full user document on every request.
+func (r *UserRepository) GetRoleByID(id primitive.ObjectID) (string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var result struct {
+		Role string `bson:"role"`
+	}
+
+	opts := options.FindOne().SetProjection(bson.M{"role": 1, "_id": 0})
+	err := r.collection.FindOne(ctx, bson.M{"_id": id}, opts).Decode(&result)
+	if err != nil {
+		return "", err
+	}
+
+	return result.Role, nil
 }
 
 func (r *UserRepository) IsFriend(userID, friendID primitive.ObjectID) (bool, error) {

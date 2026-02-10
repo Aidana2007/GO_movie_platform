@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"github.com/yerkebulan111/movie_smn/internal/model"
-	"github.com/yerkebulan111/movie_smn/internal/service"
-	"github.com/yerkebulan111/movie_smn/pkg/utils"
+	"github.com/Aidana2007/GO_movie_platform/backend/internal/model"
+	"github.com/Aidana2007/GO_movie_platform/backend/internal/service"
+	"github.com/Aidana2007/GO_movie_platform/backend/pkg/utils"
 
 	"net/http"
 	"strconv"

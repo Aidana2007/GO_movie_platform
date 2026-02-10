@@ -2,9 +2,9 @@ package service
 
 import (
 	"errors"
-	"github.com/yerkebulan111/movie_smn/internal/model"
-	"github.com/yerkebulan111/movie_smn/internal/repository"
-	"github.com/yerkebulan111/movie_smn/pkg/utils"
+	"github.com/Aidana2007/GO_movie_platform/backend/internal/model"
+	"github.com/Aidana2007/GO_movie_platform/backend/internal/repository"
+	"github.com/Aidana2007/GO_movie_platform/backend/pkg/utils"
 
 	"time"
 

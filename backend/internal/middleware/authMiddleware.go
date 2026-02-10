@@ -1,15 +1,16 @@
 package middleware
 
 import (
-	"github.com/yerkebulan111/movie_smn/pkg/utils"
 	"strings"
 
+	"github.com/Aidana2007/GO_movie_platform/backend/internal/repository"
+	"github.com/Aidana2007/GO_movie_platform/backend/pkg/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
+func AuthMiddleware(jwtSecret string, userRepo *repository.UserRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var tokenString string
 
@@ -36,7 +37,6 @@ func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			return []byte(jwtSecret), nil
 		})
-
 		if err != nil || !token.Valid {
 			c.SetCookie("token", "", -1, "/", "", false, true)
 			c.Redirect(303, "/login")
@@ -53,13 +53,21 @@ func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 
 		userID, err := primitive.ObjectIDFromHex(claims["user_id"].(string))
 		if err != nil {
-			c.JSON(401, gin.H{"error": "Invalid user ID"})
+			c.JSON(401, gin.H{"error": "Invalid user ID in token"})
+			c.Abort()
+			return
+		}
+
+		role, err := userRepo.GetRoleByID(userID)
+		if err != nil {
+			c.JSON(401, gin.H{"error": "User not found"})
 			c.Abort()
 			return
 		}
 
 		c.Set(utils.UserIDKey, userID)
 		c.Set(utils.EmailKey, claims["email"].(string))
+		c.Set(utils.RoleKey, role)
 
 		c.Next()
 	}

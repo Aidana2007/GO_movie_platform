@@ -2,8 +2,8 @@ package service
 
 import (
 	"errors"
-	"github.com/yerkebulan111/movie_smn/internal/model"
-	"github.com/yerkebulan111/movie_smn/internal/repository"
+	"github.com/Aidana2007/GO_movie_platform/backend/internal/model"
+	"github.com/Aidana2007/GO_movie_platform/backend/internal/repository"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -90,7 +90,6 @@ func (s *MovieService) DeleteMovie(id primitive.ObjectID, userID primitive.Objec
 
 	return s.movieRepo.Delete(id)
 }
-
 
 func (s *MovieService) GetTopRated(limit int) ([]*model.Movie, error) {
 	return s.movieRepo.GetTopRated(limit)

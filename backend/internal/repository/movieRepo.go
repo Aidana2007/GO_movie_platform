@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"github.com/yerkebulan111/movie_smn/internal/model"
+	"github.com/Aidana2007/GO_movie_platform/backend/internal/model"
 
 	"time"
 
@@ -220,7 +220,6 @@ func (r *MovieRepository) Search(query string, genre string, sort string, minRat
 
 	return movies, nil
 }
-
 
 func (r *MovieRepository) GetTopRated(limit int) ([]*model.Movie, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
