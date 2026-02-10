@@ -1,0 +1,80 @@
+{{define "title"}}Home{{end}}
+
+{{define "content"}}
+<div class="container">
+    <section class="hero">
+        <h1>Welcome to MovieLand</h1>
+        <p>Discover, review, and track your favorite movies</p>
+        <div class="hero-search">
+            <form action="/movies" method="GET" class="search-form-hero">
+                <input type="text" name="search" placeholder="Search for movies..." required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </section>
+
+    {{if .Movies}}
+    <section class="featured-movies">
+        <div class="section-header">
+            <h2>Top Rated Movies</h2>
+            <p>Highest rated movies by our community</p>
+        </div>
+        <div class="movie-grid">
+            {{range $index, $movie := .Movies}}
+                {{if lt $index 8}}
+                    <div class="movie-card">
+                        <a href="/movie/{{$movie.ID.Hex}}">
+                            <img src="{{$movie.PosterURL}}" alt="{{$movie.Title}}" class="movie-poster" loading="lazy">
+                            <div class="movie-info">
+                                <h3>{{$movie.Title}}</h3>
+                                <p class="movie-year">{{$movie.Year}}</p>
+                                <div class="movie-rating">
+                                    <span class="star">★</span>
+                                    <span>{{printf "%.1f" $movie.Ranking}}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {{end}}
+            {{end}}
+        </div>
+    </section>
+    {{end}}
+
+    {{if .RecentMovies}}
+    <section class="featured-movies" style="margin-top: 60px;">
+        <div class="section-header">
+            <h2>Recent Additions</h2>
+            <p>Newly added movies to our collection</p>
+        </div>
+        <div class="movie-grid">
+            {{range $index, $movie := .RecentMovies}}
+                {{if lt $index 8}}
+                    <div class="movie-card">
+                        <a href="/movie/{{$movie.ID.Hex}}">
+                            <img src="{{$movie.PosterURL}}" alt="{{$movie.Title}}" class="movie-poster" loading="lazy">
+                            <div class="movie-info">
+                                <h3>{{$movie.Title}}</h3>
+                                <p class="movie-year">{{$movie.Year}}</p>
+                                <div class="movie-rating">
+                                    <span class="star">★</span>
+                                    <span>{{printf "%.1f" $movie.Ranking}}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {{end}}
+            {{end}}
+        </div>
+    </section>
+    {{end}}
+
+    {{if not .Movies}}
+    <section class="featured-movies">
+        <p class="no-results">No movies available yet. Check back soon!</p>
+    </section>
+    {{end}}
+</div>
+{{end}}
+
+{{define "scripts"}}{{end}}
