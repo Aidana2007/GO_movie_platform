@@ -21,7 +21,3 @@ go.work
 # OS
 .DS_Store
 Thumbs.db
-
-# Logs
-*.log
-background_jobs.log
