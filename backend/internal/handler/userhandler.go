@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"github.com/Aidana2007/GO_movie_platform/backend/internal/service"
-	"github.com/Aidana2007/GO_movie_platform/backend/pkg/utils"
+	"github.com/Aidana2007/GO_movie_platform/internal/service"
+	"github.com/Aidana2007/GO_movie_platform/pkg/utils"
 
 	"net/http"
 

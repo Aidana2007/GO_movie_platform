@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     loadStats();
     loadFriends();
 });
@@ -59,24 +59,26 @@ function displayFriends(friends) {
 }
 
 function removeFriend(friendId) {
-    if (!confirm('Are you sure you want to remove this friend?')) {
-        return;
-    }
-
-    fetch(`/api/user/friends/${friendId}`, {
-        method: 'DELETE'
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                loadFriends();
-                loadStats();
-            } else {
-                alert(data.error || 'Failed to remove friend');
-            }
-        })
-        .catch(error => {
-            console.error('Error removing friend:', error);
-            alert('An error occurred. Please try again.');
-        });
+    showConfirm(
+        'Remove Friend',
+        'Are you sure you want to remove this friend?',
+        () => {
+            fetch(`/api/user/friends/${friendId}`, {
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        loadFriends();
+                        loadStats();
+                    } else {
+                        showMessage('Error', data.error || 'Failed to remove friend', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error removing friend:', error);
+                    showMessage('Error', 'An error occurred. Please try again.', 'error');
+                });
+        }
+    );
 }

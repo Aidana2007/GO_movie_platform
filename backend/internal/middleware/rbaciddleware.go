@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/Aidana2007/GO_movie_platform/backend/pkg/utils"
+	"github.com/Aidana2007/GO_movie_platform/pkg/utils"
 	"github.com/gin-gonic/gin"
 )
 

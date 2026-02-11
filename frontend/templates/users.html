@@ -1,0 +1,53 @@
+{{define "title"}}Find Users{{end}}
+
+{{define "content"}}
+<div class="container">
+    <section class="users-section">
+        <h1>Find Users</h1>
+
+        <div class="user-search">
+            <form action="/users" method="GET" class="search-form">
+                <input type="text" name="search" placeholder="Search users by username..." value="{{.Search}}" class="search-input">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+
+        {{if .SearchResults}}
+        <h2 style="margin-bottom: 20px; color: var(--dark);">Search Results</h2>
+        {{range .SearchResults}}
+        <div class="user-card">
+            <div class="user-info">
+                <h4>{{.Username}}</h4>
+                <p>Member since {{.CreatedAt.Format "Jan 2006"}}</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <a href="/user/{{.ID.Hex}}" class="btn btn-secondary btn-small">View Profile</a>
+                <button onclick="sendFriendRequest('{{.ID.Hex}}')" class="btn btn-primary btn-small">Add Friend</button>
+            </div>
+        </div>
+        {{end}}
+        {{end}}
+    </section>
+
+    {{if .User}}
+    <section class="users-section">
+        <h2 style="margin-bottom: 20px; color: var(--dark);">My Requests</h2>
+        <div id="sent-requests">
+            
+        </div>
+    </section>
+
+    <section class="users-section">
+        <h2 style="margin-bottom: 20px; color: var(--dark);">Friend Requests</h2>
+        <div id="friend-requests">
+            
+        </div>
+    </section>
+    {{end}}
+</div>
+{{end}}
+
+{{define "scripts"}}
+<script src="/static/js/modal.js"></script>
+<script src="/static/js/users.js"></script>
+{{end}}

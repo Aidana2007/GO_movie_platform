@@ -1,9 +1,10 @@
 package handler
 
 import (
-	"github.com/Aidana2007/GO_movie_platform/backend/internal/model"
-	"github.com/Aidana2007/GO_movie_platform/backend/internal/service"
 	"net/http"
+
+	"github.com/Aidana2007/GO_movie_platform/internal/model"
+	"github.com/Aidana2007/GO_movie_platform/internal/service"
 
 	"github.com/gin-gonic/gin"
 )

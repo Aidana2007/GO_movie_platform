@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"github.com/Aidana2007/GO_movie_platform/backend/internal/model"
+	"github.com/Aidana2007/GO_movie_platform/internal/model"
 
 	"time"
 

@@ -3,8 +3,8 @@ package middleware
 import (
 	"strings"
 
-	"github.com/Aidana2007/GO_movie_platform/backend/internal/repository"
-	"github.com/Aidana2007/GO_movie_platform/backend/pkg/utils"
+	"github.com/Aidana2007/GO_movie_platform/internal/repository"
+	"github.com/Aidana2007/GO_movie_platform/pkg/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"go.mongodb.org/mongo-driver/bson/primitive"
