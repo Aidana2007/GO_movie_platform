@@ -56,7 +56,6 @@ func (s *MovieService) UpdateMovie(id primitive.ObjectID, req *model.CreateMovie
 		return nil, err
 	}
 
-	// Check if user is the creator or admin
 	if movie.CreatedBy != userID {
 		return nil, errors.New("unauthorized to update this movie")
 	}
@@ -102,7 +101,6 @@ func (s *MovieService) DeleteMovie(id primitive.ObjectID, userID primitive.Objec
 		return err
 	}
 
-	// Check if user is the creator or admin
 	if movie.CreatedBy != userID {
 		return errors.New("unauthorized to delete this movie")
 	}

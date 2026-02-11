@@ -209,7 +209,6 @@ func (r *MovieRepository) Search(query string, genre string, sort string, minRat
 		filter["ranking"] = bson.M{"$gte": minRating}
 	}
 
-	// Determine sort order
 	var sortField string
 	var sortOrder int = -1 // descending by default
 

@@ -1,4 +1,3 @@
-// Watchlist JavaScript
 
 document.addEventListener('DOMContentLoaded', function () {
     loadWatchlist();

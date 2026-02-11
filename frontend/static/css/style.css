@@ -32,7 +32,7 @@ body {
     padding: 20px;
 }
 
-/* Navbar - Fixed */
+
 .navbar {
     background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
     color: white;
@@ -77,7 +77,7 @@ body {
     transform: translateY(-2px);
 }
 
-/* Hero Section */
+
 .hero {
     text-align: center;
     padding: 80px 20px;
@@ -100,7 +100,7 @@ body {
     opacity: 0.95;
 }
 
-/* Search Form in Hero */
+
 .hero-search {
     max-width: 600px;
     margin: 0 auto;
@@ -141,7 +141,7 @@ body {
     transform: scale(1.05);
 }
 
-/* Buttons */
+
 .btn {
     padding: 12px 30px;
     border: none;
@@ -185,7 +185,7 @@ body {
     font-size: 0.9rem;
 }
 
-/* Section Headers */
+
 .section-header {
     text-align: center;
     margin-bottom: 40px;
@@ -202,7 +202,7 @@ body {
     font-size: 1.1rem;
 }
 
-/* Movie Grid */
+
 .movie-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -278,7 +278,7 @@ body {
     font-weight: 600;
 }
 
-/* Search and Filters */
+
 .movies-header {
     background: white;
     padding: 30px;
@@ -344,7 +344,7 @@ body {
     display: block;
 }
 
-/* Movie Details */
+
 .movie-details {
     display: grid;
     grid-template-columns: 350px 1fr;
@@ -434,7 +434,7 @@ body {
     margin-top: 30px;
 }
 
-/* Trailer Section */
+
 .movie-trailer {
     margin-top: 30px;
 }
@@ -462,7 +462,7 @@ body {
     border: none;
 }
 
-/* Reviews Section */
+
 .reviews-section {
     background: white;
     padding: 40px;

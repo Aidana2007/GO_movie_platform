@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Modal logic
     const modalOverlay = document.getElementById('movie-modal');
     const addMovieBtn = document.getElementById('add-movie-btn');
     const closeBtn = document.querySelector('.close-modal');
@@ -33,7 +32,6 @@ function openModal(movie = null) {
     const modalTitle = document.getElementById('movie-modal-title');
     const movieIdInput = document.getElementById('movie-id');
 
-    // Reset form
     document.getElementById('movie-form').reset();
 
     if (movie) {
@@ -107,13 +105,6 @@ async function openEditMovie(id) {
         const response = await fetch(`/api/movies/${id}`);
         if (response.ok) {
             const data = await response.json();
-            // API returns { "movie": ... } or just movie object? 
-            // MovieHandler.GetMovieByID returns user, movie in template but JSON usually just movie?
-            // Checking MovieHandler.GetMovieByID in backend...
-            // It calls s.movieRepo.FindByID(id) -> *model.Movie
-            // Utils.RespondJSON calls json.NewEncoder(w).Encode(data). 
-            // If handler uses c.JSON(200, movie) it sends movie object directly.
-            // Handler: c.JSON(http.StatusOK, movie) -> Yes.
 
             openModal(data);
         } else {
@@ -133,7 +124,6 @@ async function deleteMovie(id) {
         });
 
         if (response.ok) {
-            // Remove row
             const row = document.querySelector(`tr[data-movie-id="${id}"]`);
             if (row) row.remove();
         } else {

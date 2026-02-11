@@ -236,9 +236,4 @@ func (h *PageHandler) UserProfilePage(c *gin.Context) {
 }
 
 func init() {
-	// Add custom template function for YouTube embed
-	// In your main.go where you set up templates:
-	// router.SetFuncMap(template.FuncMap{
-	//     "extractYouTubeEmbed": extractYouTubeEmbed,
-	// })
 }

@@ -103,13 +103,11 @@ func (r *UserRepository) GetWatchlist(userID primitive.ObjectID) ([]primitive.Ob
 	return user.Watchlist, nil
 }
 
-//------------
 
 func (r *UserRepository) AddFriend(userID, friendID primitive.ObjectID) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	// Add friend to both users
 	_, err := r.collection.UpdateOne(
 		ctx,
 		bson.M{"_id": userID},
@@ -132,7 +130,6 @@ func (r *UserRepository) RemoveFriend(userID, friendID primitive.ObjectID) error
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	// Remove friend from both users
 	_, err := r.collection.UpdateOne(
 		ctx,
 		bson.M{"_id": userID},
@@ -176,7 +173,6 @@ func (r *UserRepository) GetFriends(userID primitive.ObjectID) ([]*model.User, e
 		return nil, err
 	}
 
-	// Remove passwords
 	for _, friend := range friends {
 		friend.Password = ""
 	}
@@ -201,7 +197,6 @@ func (r *UserRepository) SearchUsers(query string, limit int) ([]*model.User, er
 		return nil, err
 	}
 
-	// Remove passwords
 	for _, user := range users {
 		user.Password = ""
 	}
@@ -209,8 +204,6 @@ func (r *UserRepository) SearchUsers(query string, limit int) ([]*model.User, er
 	return users, nil
 }
 
-// GetRoleByID fetches only the role field for a user. Used by RBAC middleware
-// to avoid loading the full user document on every request.
 func (r *UserRepository) GetRoleByID(id primitive.ObjectID) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()

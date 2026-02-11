@@ -31,7 +31,6 @@ func (s *ReviewService) CreateReview(movieID primitive.ObjectID, req *model.Crea
 		return nil, errors.New("movie not found")
 	}
 
-	// Check if user already reviewed this movie
 	existingReview, err := s.reviewRepo.FindByUserAndMovie(userID, movieID)
 	if err == nil && existingReview != nil {
 		return nil, errors.New("you have already reviewed this movie")
@@ -109,13 +108,11 @@ func (s *ReviewService) UpdateReview(reviewID primitive.ObjectID, req *model.Cre
 		return nil, err
 	}
 
-	// Update movie ranking
 	avgRating, err := s.reviewRepo.GetAverageRating(review.Movie)
 	if err == nil {
 		s.movieRepo.UpdateRanking(review.Movie, avgRating)
 	}
 
-	// Get updated review
 	updatedReview, err := s.reviewRepo.FindByID(reviewID)
 	if err != nil {
 		return nil, err

@@ -1,4 +1,3 @@
-// Users JavaScript
 
 document.addEventListener('DOMContentLoaded', function () {
     if (window.location.pathname === '/users') {

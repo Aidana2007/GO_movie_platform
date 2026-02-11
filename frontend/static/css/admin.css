@@ -1,4 +1,4 @@
-/* Admin Panel Styles */
+
 .admin-panel {
     background: white;
     padding: 30px;
@@ -107,7 +107,7 @@
     background-color: #c82333;
 }
 
-/* Modal form adjustments */
+
 .modal .form-row {
     display: flex;
     gap: 15px;
@@ -117,7 +117,7 @@
     flex: 1;
 }
 
-/* Admin modal sizing */
+
 #movie-modal .modal {
     width: min(960px, 95vw);
     max-width: 960px;
@@ -145,7 +145,7 @@
     }
 }
 
-/* Review Edit/Delete Button Styling */
+
 .review-actions .btn-text {
     padding: 5px 10px;
     border-radius: 4px;
@@ -175,7 +175,7 @@
     color: white;
 }
 
-/* Edit Review Form Styling Update */
+
 #edit-review-section {
     background-color: #fff;
     border: 2px solid var(--primary);

@@ -27,13 +27,11 @@ func NewAuthService(userRepo *repository.UserRepository, jwtSecret string) *Auth
 }
 
 func (s *AuthService) Register(req *model.RegisterRequest) (*model.User, error) {
-	// Check if user already exists
 	existingUser, _ := s.userRepo.FindByEmail(req.Email)
 	if existingUser != nil {
 		return nil, errors.New("user with this email already exists")
 	}
 
-	// Hash password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, err
@@ -49,7 +47,6 @@ func (s *AuthService) Register(req *model.RegisterRequest) (*model.User, error) 
 		return nil, err
 	}
 
-	// Don't return password
 	user.Password = ""
 	return user, nil
 }
@@ -60,12 +57,10 @@ func (s *AuthService) Login(req *model.LoginRequest) (*model.LoginResponse, erro
 		return nil, errors.New("invalid credentials")
 	}
 
-	// Check password
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
 		return nil, errors.New("invalid credentials")
 	}
 
-	// Generate JWT token
 	token, err := s.GenerateToken(user.ID.Hex(), user.Email)
 	if err != nil {
 		return nil, err

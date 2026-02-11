@@ -26,7 +26,6 @@ func (r *FriendRepository) CreateRequest(fromUser, toUser primitive.ObjectID) er
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	// Check if request already exists
 	existing := r.collection.FindOne(ctx, bson.M{
 		"fromUser": fromUser,
 		"toUser":   toUser,

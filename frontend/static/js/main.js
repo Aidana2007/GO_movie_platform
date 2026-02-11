@@ -1,4 +1,3 @@
-// Main JavaScript file
 
 function logout() {
     if (typeof showConfirm === 'function') {

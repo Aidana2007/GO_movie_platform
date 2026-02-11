@@ -1,4 +1,3 @@
-// Movie Details JavaScript
 
 document.addEventListener('DOMContentLoaded', function () {
     const pathParts = window.location.pathname.split('/');

@@ -125,7 +125,6 @@ func main() {
 		modReviews := apiAuth.Group("/")
 		modReviews.Use(middleware.RequireModeratorOrAdmin())
 		{
-			// Moderator specific routes if any
 		}
 
 		apiAuth.GET("/user/watchlist", userHandler.GetWatchlist)
