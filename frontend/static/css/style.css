@@ -23,7 +23,7 @@ body {
     color: #333;
     background: linear-gradient(135deg, var(--light) 0%, var(--accent) 100%);
     min-height: 100vh;
-    padding-top: 80px;
+    padding-top: 100px;
 }
 
 .container {
@@ -497,33 +497,99 @@ body {
 .review-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.review-meta {
+    display: flex;
+    flex-direction: column;
 }
 
 .review-user {
-    font-weight: bold;
+    font-weight: 700;
     color: var(--dark);
     font-size: 1.1rem;
+    margin-bottom: 4px;
 }
 
 .review-date {
     color: var(--gray);
+    font-size: 0.85rem;
+}
+
+.review-rating-badge {
+    background-color: var(--primary);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 700;
     font-size: 0.9rem;
 }
 
-.review-rating {
-    color: #ffc107;
-    margin-bottom: 10px;
-    font-size: 1.2rem;
-}
-
 .review-comment {
-    color: #555;
+    color: #444;
     line-height: 1.6;
+    margin-bottom: 15px;
+    font-size: 1rem;
 }
 
-/* Auth Pages */
+.review-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: color 0.3s;
+    padding: 0;
+}
+
+.btn-text.edit {
+    color: var(--primary);
+}
+
+.btn-text.edit:hover {
+    color: #b02a37;
+}
+
+.btn-text.delete {
+    color: var(--gray);
+}
+
+.btn-text.delete:hover {
+    color: var(--danger);
+}
+
+#edit-review-section {
+    background-color: #f8f9fa;
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid #e9ecef;
+    margin-bottom: 30px;
+}
+
+#edit-review-section h3 {
+    margin-bottom: 20px;
+    color: var(--dark);
+}
+
+#edit-review-form .form-actions {
+    margin-top: 20px;
+}
+
 .auth-container {
     display: flex;
     justify-content: center;
@@ -609,7 +675,7 @@ body {
     text-decoration: underline;
 }
 
-/* Modal/Notification */
+
 .modal-overlay {
     display: none;
     position: fixed;
@@ -617,14 +683,15 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(76, 29, 61, 0.6);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
     z-index: 2000;
     align-items: center;
     justify-content: center;
     opacity: 0;
     transition: opacity 0.3s ease;
 }
+
 
 .modal-overlay.active {
     display: flex;
@@ -706,14 +773,12 @@ body {
     }
 }
 
-/* Color variables for modals */
 :root {
     --success: #28a745;
     --danger: #dc3545;
     --warning: #ffc107;
 }
 
-/* Users Page */
 .users-section {
     background: white;
     padding: 40px;
@@ -752,7 +817,6 @@ body {
     border-left: 4px solid #ffc107;
 }
 
-/* Profile */
 .profile-section {
     background: white;
     padding: 40px;
@@ -839,7 +903,6 @@ body {
     text-decoration: underline;
 }
 
-/* Footer */
 .footer {
     background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
     color: white;
@@ -855,7 +918,6 @@ body {
     font-size: 1.1rem;
 }
 
-/* Loading Spinner */
 .loading {
     display: inline-block;
     width: 20px;
@@ -872,7 +934,6 @@ body {
     }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     body {
         padding-top: 70px;
@@ -909,4 +970,163 @@ body {
     .rating-select {
         min-width: 100%;
     }
+}
+
+.admin-panel {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px var(--shadow);
+    margin-bottom: 30px;
+}
+
+.admin-section {
+    margin-bottom: 40px;
+}
+
+.admin-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--light);
+}
+
+.admin-section-header h3 {
+    color: var(--dark);
+    font-size: 1.5rem;
+}
+
+.admin-table-container {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.admin-table th {
+    background-color: var(--gray-light);
+    color: var(--dark);
+    font-weight: 600;
+}
+
+.admin-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.role-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.role-admin {
+    background-color: var(--primary);
+    color: white;
+}
+
+.role-user {
+    background-color: var(--light);
+    color: var(--dark);
+}
+
+.role-moderator {
+    background-color: var(--secondary);
+    color: white;
+}
+
+.actions-cell {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-icon {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+    color: white;
+}
+
+.edit-movie-btn {
+    background-color: #17a2b8;
+}
+
+.edit-movie-btn:hover {
+    background-color: #138496;
+}
+
+.delete-movie-btn,
+.delete-user-btn {
+    background-color: var(--danger);
+}
+
+.delete-movie-btn:hover,
+.delete-user-btn:hover {
+    background-color: #c82333;
+}
+
+.modal .form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.modal .form-row .form-group {
+    flex: 1;
+}
+
+.review-actions .btn-text {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.review-actions .btn-text.edit {
+    background-color: #e3f2fd;
+    color: #0d6efd;
+    border: 1px solid #0d6efd;
+}
+
+.review-actions .btn-text.edit:hover {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.review-actions .btn-text.delete {
+    background-color: #f8d7da;
+    color: #dc3545;
+    border: 1px solid #dc3545;
+}
+
+.review-actions .btn-text.delete:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+
+#edit-review-section {
+    background-color: #fff;
+    border: 2px solid var(--primary);
+    box-shadow: 0 4px 12px rgba(220, 88, 109, 0.1);
+}
+
+#edit-review-section h3 {
+    color: var(--primary);
+    border-bottom: 2px solid var(--light);
+    padding-bottom: 10px;
 }

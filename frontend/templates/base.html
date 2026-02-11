@@ -1,45 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{template "title" .}} - MovieLand</title>
   <link rel="stylesheet" href="../static/css/style.css">
 </head>
+
 <body>
-<nav class="navbar">
-  <div class="container">
-    <div class="nav-brand">
-      <a href="/">MovieLand</a>
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-brand">
+        <a href="/">MovieLand</a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/movies">Movies</a></li>
+        {{if .User}}
+        {{if eq .User.Role "admin"}}
+        <li><a href="/admin" style="color: var(--warning); font-weight: bold;">Admin Panel</a></li>
+        {{end}}
+        <li><a href="/users">Users</a></li>
+        <li><a href="/watchlist">Watchlist</a></li>
+        <li><a href="/profile">Profile</a></li>
+        <li style="color: var(--light); font-weight: 600;">Welcome, {{.User.Username}}!</li>
+        <li><a href="#" onclick="logout()">Logout</a></li>
+        {{else}}
+        <li><a href="/login">Login</a></li>
+        <li><a href="/register">Register</a></li>
+        {{end}}
+      </ul>
     </div>
-    <ul class="nav-links">
-      <li><a href="/">Home</a></li>
-      <li><a href="/movies">Movies</a></li>
-      {{if .User}}
-      <li><a href="/users">Users</a></li>
-      <li><a href="/watchlist">Watchlist</a></li>
-      <li><a href="/profile">Profile</a></li>
-      <li style="color: var(--light); font-weight: 600;">Welcome, {{.User.Username}}!</li>
-      <li><a href="#" onclick="logout()">Logout</a></li>
-      {{else}}
-      <li><a href="/login">Login</a></li>
-      <li><a href="/register">Register</a></li>
-      {{end}}
-    </ul>
-  </div>
-</nav>
+  </nav>
 
-<main>
-  {{template "content" .}}
-</main>
+  <main>
+    {{template "content" .}}
+  </main>
 
-<footer class="footer">
-  <div class="container">
-    <p>&copy; 2026 MovieLand. All rights reserved.</p>
-  </div>
-</footer>
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 MovieLand. All rights reserved.</p>
+    </div>
+  </footer>
 
-<script src="../static/js/main.js"></script>
-{{template "scripts" .}}
+  <script src="../static/js/modal.js"></script>
+  <script src="../static/js/main.js"></script>
+  {{template "scripts" .}}
 </body>
+
 </html>

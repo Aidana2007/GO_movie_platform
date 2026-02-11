@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+
 	"github.com/Aidana2007/GO_movie_platform/internal/model"
 
 	"time"
@@ -244,4 +245,12 @@ func (r *UserRepository) IsFriend(userID, friendID primitive.ObjectID) (bool, er
 	}
 
 	return false, nil
+}
+
+func (r *UserRepository) Delete(id primitive.ObjectID) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	_, err := r.collection.DeleteOne(ctx, bson.M{"_id": id})
+	return err
 }

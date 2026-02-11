@@ -1,10 +1,7 @@
-// Modal utility functions for displaying messages and confirmations
-
-// Show a message modal (info, success, error)
 function showMessage(title, message, type = 'info') {
     const modal = createModal();
 
-    // Set icon and color based on type
+
     let icon = '';
     let iconColor = '';
     if (type === 'success') {
@@ -36,7 +33,6 @@ function showMessage(title, message, type = 'info') {
     showModal(modal);
 }
 
-// Show a confirmation modal
 function showConfirm(title, message, onConfirm, onCancel) {
     const modal = createModal();
 
@@ -69,7 +65,6 @@ function showConfirm(title, message, onConfirm, onCancel) {
     });
 }
 
-// Helper function to create modal element
 function createModal() {
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay';
@@ -81,31 +76,27 @@ function createModal() {
 
     overlay.appendChild(modal);
 
-    // Close on overlay click
+    
     overlay.addEventListener('click', (e) => {
         if (e.target === overlay) {
             closeModal();
         }
     });
 
-    // Close on ESC key
     document.addEventListener('keydown', handleEscKey);
 
     return modal;
 }
 
-// Helper function to show modal
 function showModal(modal) {
     const overlay = modal.parentElement;
     document.body.appendChild(overlay);
 
-    // Trigger animation
     setTimeout(() => {
         overlay.classList.add('active');
     }, 10);
 }
 
-// Helper function to close modal
 function closeModal() {
     const overlay = document.getElementById('modal-overlay');
     if (overlay) {
@@ -117,7 +108,6 @@ function closeModal() {
     }
 }
 
-// Handle ESC key press
 function handleEscKey(e) {
     if (e.key === 'Escape') {
         closeModal();

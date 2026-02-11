@@ -1,15 +1,35 @@
 // Main JavaScript file
 
 function logout() {
-    fetch('/api/auth/logout', {
-        method: 'POST',
-    })
-    .then(() => {
-        window.location.href = '/';
-    })
-    .catch(error => {
-        console.error('Logout error:', error);
-    });
+    if (typeof showConfirm === 'function') {
+        showConfirm(
+            'Logout',
+            'Are you sure you want to logout?',
+            () => {
+                fetch('/api/auth/logout', {
+                    method: 'POST',
+                })
+                    .then(() => {
+                        window.location.href = '/';
+                    })
+                    .catch(error => {
+                        console.error('Logout error:', error);
+                    });
+            }
+        );
+    } else {
+        if (confirm('Are you sure you want to logout?')) {
+            fetch('/api/auth/logout', {
+                method: 'POST',
+            })
+                .then(() => {
+                    window.location.href = '/';
+                })
+                .catch(error => {
+                    console.error('Logout error:', error);
+                });
+        }
+    }
 }
 
 function showError(elementId, message) {

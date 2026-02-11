@@ -63,6 +63,7 @@ func main() {
 	userHandler := handler.NewUserHandler(userService, movieService, authService)
 	pageHandler := handler.NewPageHandler(movieService, authService, userService, friendService)
 	friendHandler := handler.NewFriendHandler(friendService, userService)
+	adminHandler := handler.NewAdminHandler(movieService, userService, reviewService)
 
 	auth := middleware.AuthMiddleware(cfg.JWTSecret, userRepo)
 
@@ -86,6 +87,12 @@ func main() {
 		authPages.GET("/profile", pageHandler.ProfilePage)
 		authPages.GET("/users", pageHandler.UsersPage)
 		authPages.GET("/user/:id", pageHandler.UserProfilePage)
+
+		adminPages := authPages.Group("/")
+		adminPages.Use(middleware.RequireAdmin())
+		{
+			adminPages.GET("/admin", adminHandler.AdminDashboard)
+		}
 	}
 
 	api := r.Group("/api")
@@ -107,14 +114,18 @@ func main() {
 			adminMovies.POST("/movies", movieHandler.CreateMovie)
 			adminMovies.PUT("/movies/:id", movieHandler.UpdateMovie)
 			adminMovies.DELETE("/movies/:id", movieHandler.DeleteMovie)
+			adminMovies.DELETE("/admin/users/:id", adminHandler.DeleteUser)
+			adminMovies.DELETE("/admin/reviews/:id", adminHandler.DeleteReviewAdmin)
 		}
 
 		apiAuth.POST("/movies/:id/reviews", reviewHandler.CreateReview)
+		apiAuth.PUT("/reviews/:id", reviewHandler.UpdateReview)
+		apiAuth.DELETE("/reviews/:id", reviewHandler.DeleteReview)
 
 		modReviews := apiAuth.Group("/")
 		modReviews.Use(middleware.RequireModeratorOrAdmin())
 		{
-			modReviews.DELETE("/reviews/:id", reviewHandler.DeleteReview)
+			// Moderator specific routes if any
 		}
 
 		apiAuth.GET("/user/watchlist", userHandler.GetWatchlist)

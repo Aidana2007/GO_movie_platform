@@ -64,7 +64,7 @@ func (h *UserHandler) GetWatchlist(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, movies)
+	c.JSON(http.StatusOK, gin.H{"success": true, "data": movies})
 }
 
 func (h *UserHandler) AddToWatchlist(c *gin.Context) {
@@ -91,7 +91,7 @@ func (h *UserHandler) AddToWatchlist(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Added to watchlist"})
+	c.JSON(http.StatusOK, gin.H{"success": true, "message": "Added to watchlist"})
 }
 
 func (h *UserHandler) RemoveFromWatchlist(c *gin.Context) {
@@ -112,5 +112,5 @@ func (h *UserHandler) RemoveFromWatchlist(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Removed from watchlist"})
+	c.JSON(http.StatusOK, gin.H{"success": true, "message": "Removed from watchlist"})
 }

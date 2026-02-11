@@ -4,56 +4,57 @@
 <div class="container">
     <section class="movies-header">
         <h1>All Movies</h1>
-        
+
         <div class="search-filters">
             <form action="/movies" method="GET" class="search-form" id="filter-form">
-                <input type="text" name="search" placeholder="Search movies..." value="{{.Search}}" class="search-input">
+                <input type="text" name="search" placeholder="Search movies..." value="{{.Search}}"
+                    class="search-input">
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
-            
+
             <div class="filter-group">
                 <div style="flex: 1; min-width: 200px;">
                     <label class="filter-label">Genre</label>
                     <select name="genre" class="genre-select" onchange="applyFilters()">
-                        <option value="" {{if eq .Genre ""}}selected{{end}}>All Genres</option>
-                        <option value="Action" {{if eq .Genre "Action"}}selected{{end}}>Action</option>
-                        <option value="Adventure" {{if eq .Genre "Adventure"}}selected{{end}}>Adventure</option>
-                        <option value="Animation" {{if eq .Genre "Animation"}}selected{{end}}>Animation</option>
-                        <option value="Comedy" {{if eq .Genre "Comedy"}}selected{{end}}>Comedy</option>
-                        <option value="Crime" {{if eq .Genre "Crime"}}selected{{end}}>Crime</option>
-                        <option value="Drama" {{if eq .Genre "Drama"}}selected{{end}}>Drama</option>
-                        <option value="Fantasy" {{if eq .Genre "Fantasy"}}selected{{end}}>Fantasy</option>
-                        <option value="Horror" {{if eq .Genre "Horror"}}selected{{end}}>Horror</option>
-                        <option value="Mystery" {{if eq .Genre "Mystery"}}selected{{end}}>Mystery</option>
-                        <option value="Romance" {{if eq .Genre "Romance"}}selected{{end}}>Romance</option>
-                        <option value="Sci-Fi" {{if eq .Genre "Sci-Fi"}}selected{{end}}>Sci-Fi</option>
-                        <option value="Thriller" {{if eq .Genre "Thriller"}}selected{{end}}>Thriller</option>
+                        <option value="" {{if eq .Genre "" }}selected{{end}}>All Genres</option>
+                        <option value="Action" {{if eq .Genre "Action" }}selected{{end}}>Action</option>
+                        <option value="Adventure" {{if eq .Genre "Adventure" }}selected{{end}}>Adventure</option>
+                        <option value="Animation" {{if eq .Genre "Animation" }}selected{{end}}>Animation</option>
+                        <option value="Comedy" {{if eq .Genre "Comedy" }}selected{{end}}>Comedy</option>
+                        <option value="Crime" {{if eq .Genre "Crime" }}selected{{end}}>Crime</option>
+                        <option value="Drama" {{if eq .Genre "Drama" }}selected{{end}}>Drama</option>
+                        <option value="Fantasy" {{if eq .Genre "Fantasy" }}selected{{end}}>Fantasy</option>
+                        <option value="Horror" {{if eq .Genre "Horror" }}selected{{end}}>Horror</option>
+                        <option value="Mystery" {{if eq .Genre "Mystery" }}selected{{end}}>Mystery</option>
+                        <option value="Romance" {{if eq .Genre "Romance" }}selected{{end}}>Romance</option>
+                        <option value="Sci-Fi" {{if eq .Genre "Sci-Fi" }}selected{{end}}>Sci-Fi</option>
+                        <option value="Thriller" {{if eq .Genre "Thriller" }}selected{{end}}>Thriller</option>
                     </select>
                 </div>
-                
+
                 <div style="flex: 1; min-width: 200px;">
                     <label class="filter-label">Sort By</label>
                     <select name="sort" class="sort-select" onchange="applyFilters()">
-                        <option value="latest" {{if eq .Sort "latest"}}selected{{end}}>Latest</option>
-                        <option value="rating" {{if eq .Sort "rating"}}selected{{end}}>Rating</option>
-                        <option value="year" {{if eq .Sort "year"}}selected{{end}}>Year</option>
+                        <option value="latest" {{if eq .Sort "latest" }}selected{{end}}>Latest</option>
+                        <option value="rating" {{if eq .Sort "rating" }}selected{{end}}>Rating</option>
+                        <option value="year" {{if eq .Sort "year" }}selected{{end}}>Year</option>
                     </select>
                 </div>
-                
+
                 <div style="flex: 1; min-width: 200px;">
                     <label class="filter-label">Min Rating</label>
                     <select name="minRating" class="rating-select" onchange="applyFilters()">
-                        <option value="0" {{if eq .MinRating "0"}}selected{{end}}>Any Rating</option>
-                        <option value="1" {{if eq .MinRating "1"}}selected{{end}}>1+</option>
-                        <option value="2" {{if eq .MinRating "2"}}selected{{end}}>2+</option>
-                        <option value="3" {{if eq .MinRating "3"}}selected{{end}}>3+</option>
-                        <option value="4" {{if eq .MinRating "4"}}selected{{end}}>4+</option>
-                        <option value="5" {{if eq .MinRating "5"}}selected{{end}}>5+</option>
-                        <option value="6" {{if eq .MinRating "6"}}selected{{end}}>6+</option>
-                        <option value="7" {{if eq .MinRating "7"}}selected{{end}}>7+</option>
-                        <option value="8" {{if eq .MinRating "8"}}selected{{end}}>8+</option>
-                        <option value="9" {{if eq .MinRating "9"}}selected{{end}}>9+</option>
-                        <option value="10" {{if eq .MinRating "10"}}selected{{end}}>10</option>
+                        <option value="0" {{if eq .MinRating "0" }}selected{{end}}>Any Rating</option>
+                        <option value="1" {{if eq .MinRating "1" }}selected{{end}}>1+</option>
+                        <option value="2" {{if eq .MinRating "2" }}selected{{end}}>2+</option>
+                        <option value="3" {{if eq .MinRating "3" }}selected{{end}}>3+</option>
+                        <option value="4" {{if eq .MinRating "4" }}selected{{end}}>4+</option>
+                        <option value="5" {{if eq .MinRating "5" }}selected{{end}}>5+</option>
+                        <option value="6" {{if eq .MinRating "6" }}selected{{end}}>6+</option>
+                        <option value="7" {{if eq .MinRating "7" }}selected{{end}}>7+</option>
+                        <option value="8" {{if eq .MinRating "8" }}selected{{end}}>8+</option>
+                        <option value="9" {{if eq .MinRating "9" }}selected{{end}}>9+</option>
+                        <option value="10" {{if eq .MinRating "10" }}selected{{end}}>10</option>
                     </select>
                 </div>
             </div>
@@ -62,35 +63,36 @@
 
     <div class="movie-grid">
         {{range .Movies}}
-            <div class="movie-card">
-                <a href="/movie/{{.ID.Hex}}">
-                    <img src="{{.PosterURL}}" alt="{{.Title}}" class="movie-poster" loading="lazy">
-                    <div class="movie-info">
-                        <h3>{{.Title}}</h3>
-                        <p class="movie-year">{{.Year}}</p>
-                        <div class="movie-rating">
-                            <span class="star">★</span>
-                            <span>{{printf "%.1f" .Ranking}}</span>
-                        </div>
-                        <div class="movie-genres">
-                            {{range $index, $genre := .Genre}}
-                                {{if lt $index 2}}
-                                    <span class="genre-badge">{{$genre}}</span>
-                                {{end}}
-                            {{end}}
-                        </div>
+        <div class="movie-card">
+            <a href="/movie/{{.ID.Hex}}">
+                <img src="{{.PosterURL}}" alt="{{.Title}}" class="movie-poster" loading="lazy">
+                <div class="movie-info">
+                    <h3>{{.Title}}</h3>
+                    <p class="movie-year">{{.Year}}</p>
+                    <div class="movie-rating">
+                        <span class="star">★</span>
+                        <span>{{printf "%.1f" .Ranking}}</span>
                     </div>
-                </a>
-                {{if $.User}}
-                <div style="padding: 10px;">
-                    <button onclick="quickAddToWatchlist('{{.ID.Hex}}', event)" class="btn btn-primary btn-block btn-small" id="watchlist-btn-{{.ID.Hex}}">
-                        + Watchlist
-                    </button>
+                    <div class="movie-genres">
+                        {{range $index, $genre := .Genre}}
+                        {{if lt $index 2}}
+                        <span class="genre-badge">{{$genre}}</span>
+                        {{end}}
+                        {{end}}
+                    </div>
                 </div>
-                {{end}}
+            </a>
+            {{if $.User}}
+            <div style="padding: 10px;">
+                <button onclick="quickAddToWatchlist('{{.ID.Hex}}', event)" class="btn btn-primary btn-block btn-small"
+                    id="watchlist-btn-{{.ID.Hex}}">
+                    + Watchlist
+                </button>
             </div>
+            {{end}}
+        </div>
         {{else}}
-            <p class="no-results">No movies found. Try different filters.</p>
+        <p class="no-results">No movies found. Try different filters.</p>
         {{end}}
     </div>
 </div>
@@ -98,73 +100,74 @@
 
 {{define "scripts"}}
 <script>
-function applyFilters() {
-    const search = document.querySelector('input[name="search"]').value;
-    const genre = document.querySelector('select[name="genre"]').value;
-    const sort = document.querySelector('select[name="sort"]').value;
-    const minRating = document.querySelector('select[name="minRating"]').value;
-    
-    const params = new URLSearchParams();
-    if (search) params.append('search', search);
-    if (genre) params.append('genre', genre);
-    if (sort) params.append('sort', sort);
-    if (minRating && minRating !== '0') params.append('minRating', minRating);
-    
-    window.location.href = '/movies?' + params.toString();
-}
+    function applyFilters() {
+        const search = document.querySelector('input[name="search"]').value;
+        const genre = document.querySelector('select[name="genre"]').value;
+        const sort = document.querySelector('select[name="sort"]').value;
+        const minRating = document.querySelector('select[name="minRating"]').value;
 
-function quickAddToWatchlist(movieId, event) {
-    event.preventDefault();
-    event.stopPropagation();
-    
-    const btn = document.getElementById('watchlist-btn-' + movieId);
-    const isInWatchlist = btn.textContent.includes('✓');
-    
-    const url = `/api/user/watchlist/${movieId}`;
-    const method = isInWatchlist ? 'DELETE' : 'POST';
-    
-    fetch(url, { method })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                if (isInWatchlist) {
-                    btn.textContent = '+ Watchlist';
-                    btn.classList.add('btn-primary');
-                    btn.classList.remove('btn-secondary');
-                } else {
-                    btn.textContent = '✓ In Watchlist';
-                    btn.classList.remove('btn-primary');
-                    btn.classList.add('btn-secondary');
-                }
-            } else {
-                alert(data.error || 'Failed to update watchlist');
-            }
-        })
-        .catch(error => {
-            console.error('Error toggling watchlist:', error);
-            alert('An error occurred. Please try again.');
-        });
-}
+        const params = new URLSearchParams();
+        if (search) params.append('search', search);
+        if (genre) params.append('genre', genre);
+        if (sort) params.append('sort', sort);
+        if (minRating && minRating !== '0') params.append('minRating', minRating);
 
-// Check watchlist status on page load
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('/api/user/watchlist')
-        .then(response => response.json())
-        .then(data => {
-            if (data.success && data.data) {
-                data.data.forEach(movie => {
-                    const btn = document.getElementById('watchlist-btn-' + movie._id);
-                    if (btn) {
+        window.location.href = '/movies?' + params.toString();
+    }
+
+    function quickAddToWatchlist(movieId, event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const btn = document.getElementById('watchlist-btn-' + movieId);
+        const isInWatchlist = btn.textContent.includes('✓');
+
+        const url = `/api/user/watchlist/${movieId}`;
+        const method = isInWatchlist ? 'DELETE' : 'POST';
+
+        fetch(url, { method })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (isInWatchlist) {
+                        btn.textContent = '+ Watchlist';
+                        btn.classList.add('btn-primary');
+                        btn.classList.remove('btn-secondary');
+                        showMessage('Success', 'Removed from watchlist', 'success');
+                    } else {
                         btn.textContent = '✓ In Watchlist';
                         btn.classList.remove('btn-primary');
                         btn.classList.add('btn-secondary');
+                        showMessage('Success', 'Added to watchlist!', 'success');
                     }
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error checking watchlist:', error);
-        });
-});
+                } else {
+                    showMessage('Error', data.error || 'Failed to update watchlist', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error toggling watchlist:', error);
+                showMessage('Error', 'An error occurred. Please try again.', 'error');
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/api/user/watchlist')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.data) {
+                    data.data.forEach(movie => {
+                        const btn = document.getElementById('watchlist-btn-' + movie._id);
+                        if (btn) {
+                            btn.textContent = '✓ In Watchlist';
+                            btn.classList.remove('btn-primary');
+                            btn.classList.add('btn-secondary');
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error checking watchlist:', error);
+            });
+    });
 </script>
 {{end}}

@@ -1,6 +1,6 @@
 // Watchlist JavaScript
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     loadWatchlist();
 });
 
@@ -42,9 +42,9 @@ function displayWatchlist(movies) {
                         <span>${movie.ranking.toFixed(1)}</span>
                     </div>
                     <div class="movie-genres">
-                        ${movie.genre.slice(0, 2).map(genre => 
-                            `<span class="genre-badge">${genre}</span>`
-                        ).join('')}
+                        ${movie.genre.slice(0, 2).map(genre =>
+        `<span class="genre-badge">${genre}</span>`
+    ).join('')}
                     </div>
                 </div>
             </a>
@@ -58,19 +58,26 @@ function displayWatchlist(movies) {
 }
 
 function removeFromWatchlist(movieId) {
-    fetch(`/api/user/watchlist/${movieId}`, {
-        method: 'DELETE',
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            loadWatchlist();
-        } else {
-            alert(data.error || 'Failed to remove from watchlist');
+    showConfirm(
+        'Remove from Watchlist',
+        'Are you sure you want to remove this movie from your watchlist?',
+        () => {
+            fetch(`/api/user/watchlist/${movieId}`, {
+                method: 'DELETE',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showMessage('Success', 'Movie removed from watchlist', 'success');
+                        loadWatchlist();
+                    } else {
+                        showMessage('Error', data.error || 'Failed to remove from watchlist', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error removing from watchlist:', error);
+                    showMessage('Error', 'An error occurred. Please try again.', 'error');
+                });
         }
-    })
-    .catch(error => {
-        console.error('Error removing from watchlist:', error);
-        alert('An error occurred. Please try again.');
-    });
+    );
 }

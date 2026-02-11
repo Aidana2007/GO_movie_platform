@@ -53,3 +53,7 @@ func (s *UserService) RemoveFriend(userID, friendID primitive.ObjectID) error {
 func (s *UserService) IsFriend(userID, friendID primitive.ObjectID) (bool, error) {
 	return s.userRepo.IsFriend(userID, friendID)
 }
+
+func (s *UserService) DeleteUser(userID primitive.ObjectID) error {
+	return s.userRepo.Delete(userID)
+}

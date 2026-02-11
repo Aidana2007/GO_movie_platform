@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+
 	"github.com/Aidana2007/GO_movie_platform/internal/model"
 
 	"time"
@@ -110,4 +111,32 @@ func (r *ReviewRepository) GetAverageRating(movieID primitive.ObjectID) (float64
 	}
 
 	return avg, nil
+}
+
+func (r *ReviewRepository) FindByUserAndMovie(userID primitive.ObjectID, movieID primitive.ObjectID) (*model.Review, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var review model.Review
+	err := r.collection.FindOne(ctx, bson.M{"user": userID, "movie": movieID}).Decode(&review)
+	if err != nil {
+		return nil, err
+	}
+
+	return &review, nil
+}
+
+func (r *ReviewRepository) Update(id primitive.ObjectID, rating int, comment string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	update := bson.M{
+		"$set": bson.M{
+			"rating":  rating,
+			"comment": comment,
+		},
+	}
+
+	_, err := r.collection.UpdateOne(ctx, bson.M{"_id": id}, update)
+	return err
 }

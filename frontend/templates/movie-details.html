@@ -6,21 +6,21 @@
         <div class="movie-poster-large">
             <img src="{{.Movie.PosterURL}}" alt="{{.Movie.Title}}">
         </div>
-        
+
         <div class="movie-content">
             <h1>{{.Movie.Title}}</h1>
             <div class="movie-meta">
                 <span class="year">{{.Movie.Year}}</span>
                 <span class="director">Directed by {{.Movie.Director}}</span>
                 <div class="rating">
-                    <span class="star">★</span>
                     <span class="rating-value">{{printf "%.1f" .Movie.Ranking}}/10</span>
+                    <span class="review-count" id="review-count-display">(0 reviews)</span>
                 </div>
             </div>
 
             <div class="movie-genres-detail">
                 {{range .Movie.Genre}}
-                    <span class="genre-badge">{{.}}</span>
+                <span class="genre-badge">{{.}}</span>
                 {{end}}
             </div>
 
@@ -35,56 +35,75 @@
             </div>
 
             {{if .User}}
-                <div class="movie-actions">
-                    <button onclick="toggleWatchlist('{{.Movie.ID.Hex}}')" class="btn btn-secondary" id="watchlist-btn">
-                        Add to Watchlist
-                    </button>
-                </div>
+            <div class="movie-actions">
+                <button onclick="toggleWatchlist('{{.Movie.ID.Hex}}')" class="btn btn-secondary" id="watchlist-btn">
+                    Add to Watchlist
+                </button>
+            </div>
             {{end}}
 
             {{if .Movie.TrailerURL}}
-                <div class="movie-trailer">
-                    <h3>Trailer</h3>
-                    <div class="trailer-container">
-                        <iframe src="{{.Movie.TrailerURL | extractYouTubeEmbed}}" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
-                        </iframe>
-                    </div>
+            <div class="movie-trailer">
+                <h3>Trailer</h3>
+                <div class="trailer-container">
+                    <iframe src="{{.Movie.TrailerURL | extractYouTubeEmbed}}"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
                 </div>
+            </div>
             {{end}}
         </div>
     </div>
 
     <section class="reviews-section">
         <h2>Reviews</h2>
-        
+
         {{if .User}}
-            <div class="add-review">
-                <h3>Write a Review</h3>
-                <form id="review-form" onsubmit="submitReview(event, '{{.Movie.ID.Hex}}')">
-                    <div class="form-group">
-                        <label for="rating">Rating (1-10)</label>
-                        <input type="number" id="rating" name="rating" min="1" max="10" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="comment">Comment</label>
-                        <textarea id="comment" name="comment" rows="4" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit Review</button>
-                </form>
-            </div>
+        <input type="hidden" id="current-user-id" value="{{.User.ID.Hex}}">
+        <input type="hidden" id="current-user-role" value="{{.User.Role}}">
+        <div class="add-review" id="add-review-section">
+            <h3>Write a Review</h3>
+            <form id="review-form" onsubmit="submitReview(event, '{{.Movie.ID.Hex}}')">
+                <div class="form-group">
+                    <label for="rating">Rating (1-10)</label>
+                    <input type="number" id="rating" name="rating" min="1" max="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Comment</label>
+                    <textarea id="comment" name="comment" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Review</button>
+            </form>
+        </div>
+        <div id="edit-review-section" style="display: none;" class="add-review">
+            <h3>Edit Your Review</h3>
+            <form id="edit-review-form">
+                <div class="form-group">
+                    <label for="edit-rating">Rating (1-10)</label>
+                    <input type="number" id="edit-rating" name="rating" min="1" max="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-comment">Comment</label>
+                    <textarea id="edit-comment" name="comment" rows="4" required></textarea>
+                </div>
+                <div class="form-actions" style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn btn-primary">Update Review</button>
+                    <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Cancel</button>
+                </div>
+            </form>
+        </div>
         {{else}}
-            <p style="margin-bottom: 30px;"><a href="/login" style="color: var(--primary);">Login</a> to write a review.</p>
+        <p style="margin-bottom: 30px;"><a href="/login" style="color: var(--primary);">Login</a> to write a review.</p>
         {{end}}
 
         <div class="reviews-list" id="reviews-list">
-            <!-- Reviews will be loaded here -->
         </div>
     </section>
 </div>
 {{end}}
 
 {{define "scripts"}}
+<script src="../static/js/modal.js"></script>
 <script src="../static/js/movie-details.js"></script>
 {{end}}

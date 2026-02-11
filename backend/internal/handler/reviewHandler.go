@@ -36,7 +36,7 @@ func (h *ReviewHandler) GetMovieReviews(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, reviews)
+	c.JSON(http.StatusOK, gin.H{"success": true, "data": reviews})
 }
 
 func (h *ReviewHandler) CreateReview(c *gin.Context) {
@@ -75,7 +75,7 @@ func (h *ReviewHandler) CreateReview(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, review)
+	c.JSON(http.StatusCreated, gin.H{"success": true, "data": review})
 }
 
 func (h *ReviewHandler) DeleteReview(c *gin.Context) {
@@ -96,5 +96,33 @@ func (h *ReviewHandler) DeleteReview(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Review deleted successfully"})
+	c.JSON(http.StatusOK, gin.H{"success": true, "message": "Review deleted successfully"})
+}
+
+func (h *ReviewHandler) UpdateReview(c *gin.Context) {
+	userID, exists := c.Get(utils.UserIDKey)
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	reviewID, err := primitive.ObjectIDFromHex(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid review ID"})
+		return
+	}
+
+	var req model.CreateReviewRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	review, err := h.reviewService.UpdateReview(reviewID, &req, userID.(primitive.ObjectID))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"success": true, "data": review})
 }
