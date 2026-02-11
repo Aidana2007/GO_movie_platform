@@ -1,3 +1,9 @@
+{{define "title"}}Admin{{end}}
+
+{{define "styles"}}
+<link rel="stylesheet" href="/static/css/admin.css">
+{{end}}
+
 {{define "content"}}
 <div class="container admin-panel">
     <div class="section-header">
@@ -129,5 +135,8 @@
     </div>
 </div>
 
-<script src="../static/js/admin.js"></script>
+{{end}}
+
+{{define "scripts"}}
+<script src="/static/js/admin.js"></script>
 {{end}}

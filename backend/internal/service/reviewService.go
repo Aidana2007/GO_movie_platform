@@ -26,7 +26,7 @@ func (s *ReviewService) CreateReview(movieID primitive.ObjectID, req *model.Crea
 		return nil, errors.New("rating must be between 1 and 10")
 	}
 
-	_, err := s.movieRepo.FindByID(movieID)
+	_, err := s.movieRepo.FindByIDForRead(movieID)
 	if err != nil {
 		return nil, errors.New("movie not found")
 	}

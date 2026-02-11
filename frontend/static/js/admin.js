@@ -38,7 +38,7 @@ function openModal(movie = null) {
 
     if (movie) {
         modalTitle.textContent = 'Edit Movie';
-        movieIdInput.value = movie.ID;
+        movieIdInput.value = movie._id || movie.ID;
         document.getElementById('movie-title').value = movie.title;
         document.getElementById('movie-description').value = movie.description;
         document.getElementById('movie-year').value = movie.year;
@@ -65,13 +65,7 @@ async function handleMovieSubmit(e) {
 
     const movieId = document.getElementById('movie-id').value;
     const isEdit = !!movieId;
-    const url = isEdit ? `/api/auth/movies/${movieId}` : '/api/auth/movies'; // Note: check route prefixes
-    // Actually routes are /api/movies (POST) and /api/movies/:id (PUT) but under auth group.
-    // My routes in main.go:
-    // adminMovies.POST("/movies", movieHandler.CreateMovie) -> /api/movies (Wait, the group is apiAuth -> adminMovies)
-    // apiAuth group is /api/ ... wait.
-    // main.go: api := r.Group("/api") -> apiAuth := api.Group("/") -> adminMovies := apiAuth.Group("/")
-    // So it is /api/movies for POST and /api/movies/:id for PUT. Correct.
+    const url = isEdit ? `/api/movies/${movieId}` : '/api/movies';
 
     const cast = document.getElementById('movie-cast').value.split(',').map(s => s.trim());
     const genre = document.getElementById('movie-genre').value.split(',').map(s => s.trim());

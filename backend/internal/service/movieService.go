@@ -43,7 +43,7 @@ func (s *MovieService) GetAllMovies() ([]*model.Movie, error) {
 }
 
 func (s *MovieService) GetMovieByID(id primitive.ObjectID) (*model.Movie, error) {
-	return s.movieRepo.FindByID(id)
+	return s.movieRepo.FindByIDForRead(id)
 }
 
 func (s *MovieService) GetMoviesByIDs(ids []primitive.ObjectID) ([]*model.Movie, error) {
@@ -77,6 +77,25 @@ func (s *MovieService) UpdateMovie(id primitive.ObjectID, req *model.CreateMovie
 	return movie, nil
 }
 
+func (s *MovieService) UpdateMovieAdmin(id primitive.ObjectID, req *model.CreateMovieRequest) (*model.Movie, error) {
+	movie := &model.Movie{
+		Title:       req.Title,
+		Description: req.Description,
+		Year:        req.Year,
+		Director:    req.Director,
+		Cast:        req.Cast,
+		Genre:       req.Genre,
+		PosterURL:   req.PosterURL,
+		TrailerURL:  req.TrailerURL,
+	}
+
+	if err := s.movieRepo.Update(id, movie); err != nil {
+		return nil, err
+	}
+
+	return s.movieRepo.FindByIDForRead(id)
+}
+
 func (s *MovieService) DeleteMovie(id primitive.ObjectID, userID primitive.ObjectID) error {
 	movie, err := s.movieRepo.FindByID(id)
 	if err != nil {
@@ -88,6 +107,10 @@ func (s *MovieService) DeleteMovie(id primitive.ObjectID, userID primitive.Objec
 		return errors.New("unauthorized to delete this movie")
 	}
 
+	return s.movieRepo.Delete(id)
+}
+
+func (s *MovieService) DeleteMovieAdmin(id primitive.ObjectID) error {
 	return s.movieRepo.Delete(id)
 }
 

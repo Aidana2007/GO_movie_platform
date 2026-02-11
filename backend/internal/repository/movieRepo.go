@@ -45,7 +45,9 @@ func (r *MovieRepository) FindAll() ([]*model.Movie, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	opts := options.Find().SetSort(bson.D{{Key: "createdAt", Value: -1}})
+	opts := options.Find().
+		SetSort(bson.D{{Key: "createdAt", Value: -1}}).
+		SetProjection(bson.M{"createdBy": 0})
 	cursor, err := r.collection.Find(ctx, bson.M{}, opts)
 	if err != nil {
 		return nil, err
@@ -73,11 +75,26 @@ func (r *MovieRepository) FindByID(id primitive.ObjectID) (*model.Movie, error) 
 	return &movie, nil
 }
 
+func (r *MovieRepository) FindByIDForRead(id primitive.ObjectID) (*model.Movie, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var movie model.Movie
+	opts := options.FindOne().SetProjection(bson.M{"createdBy": 0})
+	err := r.collection.FindOne(ctx, bson.M{"_id": id}, opts).Decode(&movie)
+	if err != nil {
+		return nil, err
+	}
+
+	return &movie, nil
+}
+
 func (r *MovieRepository) FindByIDs(ids []primitive.ObjectID) ([]*model.Movie, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	cursor, err := r.collection.Find(ctx, bson.M{"_id": bson.M{"$in": ids}})
+	opts := options.Find().SetProjection(bson.M{"createdBy": 0})
+	cursor, err := r.collection.Find(ctx, bson.M{"_id": bson.M{"$in": ids}}, opts)
 	if err != nil {
 		return nil, err
 	}
@@ -208,6 +225,7 @@ func (r *MovieRepository) Search(query string, genre string, sort string, minRat
 	}
 
 	opts := options.Find().SetSort(bson.D{{Key: sortField, Value: sortOrder}})
+	opts.SetProjection(bson.M{"createdBy": 0})
 	cursor, err := r.collection.Find(ctx, filter, opts)
 	if err != nil {
 		return nil, err
@@ -228,7 +246,8 @@ func (r *MovieRepository) GetTopRated(limit int) ([]*model.Movie, error) {
 
 	opts := options.Find().
 		SetSort(bson.D{{Key: "ranking", Value: -1}}).
-		SetLimit(int64(limit))
+		SetLimit(int64(limit)).
+		SetProjection(bson.M{"createdBy": 0})
 
 	cursor, err := r.collection.Find(ctx, bson.M{}, opts)
 	if err != nil {

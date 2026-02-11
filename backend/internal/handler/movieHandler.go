@@ -110,6 +110,16 @@ func (h *MovieHandler) UpdateMovie(c *gin.Context) {
 		return
 	}
 
+	if role, ok := utils.GetRoleFromGinContext(c); ok && role == utils.RoleAdmin {
+		movie, err := h.movieService.UpdateMovieAdmin(id, &req)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, movie)
+		return
+	}
+
 	movie, err := h.movieService.UpdateMovie(id, &req, userID.(primitive.ObjectID))
 	if err != nil {
 		c.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
@@ -129,6 +139,15 @@ func (h *MovieHandler) DeleteMovie(c *gin.Context) {
 	id, err := primitive.ObjectIDFromHex(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid movie ID"})
+		return
+	}
+
+	if role, ok := utils.GetRoleFromGinContext(c); ok && role == utils.RoleAdmin {
+		if err := h.movieService.DeleteMovieAdmin(id); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"message": "Movie deleted successfully"})
 		return
 	}
 

@@ -117,6 +117,34 @@
     flex: 1;
 }
 
+/* Admin modal sizing */
+#movie-modal .modal {
+    width: min(960px, 95vw);
+    max-width: 960px;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#movie-modal .modal-body {
+    max-height: calc(90vh - 120px);
+    overflow-y: auto;
+    padding-right: 24px;
+}
+
+@media (max-width: 768px) {
+    #movie-modal .modal {
+        width: 96vw;
+        max-width: 96vw;
+    }
+
+    #movie-modal .modal-body {
+        max-height: calc(90vh - 100px);
+        padding-right: 16px;
+    }
+}
+
 /* Review Edit/Delete Button Styling */
 .review-actions .btn-text {
     padding: 5px 10px;
