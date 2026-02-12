@@ -1,109 +1,112 @@
-# Movie Platform
+Here is the revised README file in English, without emojis or decorative elements:
 
-Платформа для просмотра и обсуждения фильмов с использованием Go (Gin) и HTML/JS.
+Movie Platform
 
-## Требования проекта
+A web platform for browsing and discussing movies built with Go (Gin framework) and HTML/JavaScript.
 
-- ✅ **Usage of middleware** - `AuthMiddleware`, `AdminMiddleware`, CORS middleware
-- ✅ **Front-End (ready html template is ok)** - Go HTML templates в `templates/`
-- ✅ **Usage of golang templating tags** - Используются `{{.TotalMovies}}`, `{{.TotalUsers}}`, `{{.TotalReviews}}`
-- ✅ **Clean code and solid project structure** - Четкое разделение на пакеты
-- ✅ **Bonus: usage of JS** - Встроенный JS в Go templates
 
-## Структура проекта
-
-```
+Project Structure
 GO_movie_platform/
-├── main.go                 # Точка входа
-├── controllers/            # Обработчики запросов
-│   ├── home.go            # Главная страница (Go template)
-│   ├── movies.go          # Страницы с HTML + JS
-│   ├── movie.go           # API для фильмов
-│   ├── review.go          # API для отзывов
-│   └── user.go            # API для пользователей
-├── middleware/            # Middleware
-│   ├── auth.go           # Аутентификация
-│   └── admin.go          # Проверка админ прав
-├── models/                # Модели данных
-├── routes/                # Маршруты
-├── database/              # Подключение к БД
-├── utils/                 # Утилиты
-├── templates/             # Go HTML templates с HTML + JS
-│   ├── index.html        # Главная (Go template)
-│   ├── movies.html       # Список фильмов
-│   └── movie-details.html # Детали фильма
-└── .env                   # Переменные окружения
-```
+├── main.go                 # Application entry point
+├── controllers/            # Request handlers
+│   ├── home.go             # Home page (Go template)
+│   ├── movies.go           # HTML + JS pages
+│   ├── movie.go            # Movies API
+│   ├── review.go           # Reviews API
+│   └── user.go             # Users API
+├── middleware/             # Middleware layer
+│   ├── auth.go             # Authentication middleware
+│   └── admin.go            # Admin authorization middleware
+├── models/                 # Data models
+├── routes/                 # Route definitions
+├── database/               # Database connection
+├── utils/                  # Utility functions
+├── templates/              # Go HTML templates (HTML + JS)
+│   ├── index.html          # Home page (Go template)
+│   ├── movies.html         # Movies list page
+│   └── movie-details.html  # Movie details page
+└── .env                    # Environment variables
+Installation
 
-## Установка
+Go 1.21 or higher
 
-### Требования
-- Go 1.21+
-- MongoDB
+MongoDB
 
-### Шаги
+Setup Steps
 
-1. **Установите зависимости Go**
-```bash
+Install Go dependencies:
+
 go mod download
-```
 
-2. **Создайте файл `.env`**
-```env
+Create a .env file in the project root:
+
 MONGODB_URI=mongodb://localhost:27017
 MONGODB_DATABASE=movie_platform
 SECRET_KEY=your-secret-key-here
 SECRET_REFRESH_KEY=your-refresh-secret-key-here
 PORT=8080
-```
-
-## Запуск
-
-```bash
+Running the Application
 go run main.go
-```
 
-Сервер запустится на `http://localhost:8080`
+The server will start at:
 
-**URLs:**
-- Главная (Go Template): http://localhost:8080/
-- Фильмы: http://localhost:8080/movies
-- API: http://localhost:8080/api
+http://localhost:8080
+Available URLs
 
-## API Endpoints
+Home (Go Template): http://localhost:8080/
 
-### Публичные
-- `GET /api/movies` - Список фильмов
-- `GET /api/movies/:id` - Детали фильма
-- `GET /api/movies/:id/reviews` - Отзывы фильма
-- `POST /api/register` - Регистрация
-- `POST /api/login` - Вход
+Movies Page: http://localhost:8080/movies
 
-### Требуют авторизации
-- `POST /api/movies/:id/reviews` - Добавить отзыв
-- `DELETE /api/reviews/:id` - Удалить отзыв
+API Base: http://localhost:8080/api
 
-### Требуют админ прав
-- `POST /api/movies` - Добавить фильм
-- `PUT /api/movies/:id` - Обновить фильм
-- `DELETE /api/movies/:id` - Удалить фильм
+API Endpoints
+Public Endpoints
 
-## Технологии
+GET /api/movies — Get list of movies
 
-**Backend:**
-- Go 1.21+
-- Gin (веб-фреймворк)
-- MongoDB
-- JWT (аутентификация)
+GET /api/movies/:id — Get movie details
 
-**Frontend:**
-- Go HTML Templates (требование)
-- Vanilla JS (fetch API)
-- Vanilla CSS
+GET /api/movies/:id/reviews — Get reviews for a movie
 
-## Особенности
+POST /api/register — User registration
 
-- **Простота**: JS встроен, не нужен npm/node
-- **Go Templates**: Главная страница использует Go templating
-- **JS**: Скрипты встроены прямо в HTML
-- **Один сервер**: Все работает на одном Go сервере
+POST /api/login — User login
+
+Requires Authentication
+
+POST /api/movies/:id/reviews — Add a review
+
+DELETE /api/reviews/:id — Delete a review
+
+Requires Admin Role
+
+POST /api/movies — Create a new movie
+
+PUT /api/movies/:id — Update a movie
+
+DELETE /api/movies/:id — Delete a movie
+
+Technologies Used
+
+Backend:
+
+Go 1.21+
+
+Gin (web framework)
+
+MongoDB
+
+JWT for authentication
+
+Frontend:
+
+Go HTML Templates
+
+Vanilla JavaScript (Fetch API)
+
+Vanilla CSS
+
+
+Server-side rendering with Go templates
+
+JWT-based authentication and role-based authorization
