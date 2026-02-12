@@ -6,6 +6,7 @@ A web platform for browsing and discussing movies built with Go (Gin framework) 
 
 
 Project Structure
+
 GO_movie_platform/
 ├── main.go                 # Application entry point
 ├── controllers/            # Request handlers
@@ -26,6 +27,8 @@ GO_movie_platform/
 │   ├── movies.html         # Movies list page
 │   └── movie-details.html  # Movie details page
 └── .env                    # Environment variables
+
+
 Installation
 
 Go 1.21 or higher
